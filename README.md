@@ -177,6 +177,12 @@ conda create -n bomifa python=3.9
 conda activate bomifa
 pip install -r requirements.txt
 ```
+ 
+## How to Reproduce the Analysis
+```bash
+python main_bomifa.py
+
+```
 
 
 
