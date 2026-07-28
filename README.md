@@ -6,8 +6,9 @@ BOMIFA is an advanced computing framework specifically designed for predicting t
 
 
 
-
 ## Repository Structure
+
+```plaintext
 BOMIFA/
 ├── README.md                         # Project documentation
 ├── requirements.txt                  # List of dependencies
@@ -43,24 +44,6 @@ BOMIFA/
 │
 ├── main_bomifa.py                    # Main entry script (set hyperparameters and launch training)
 └── main_fine_marker.py               # Biomarker extraction and saliency analysis script
-
-
-
-## Dataset
-This project uses transcriptomic and survival data
-├── UCEC/                        # UCEC (Uterine Corpus Endometrial Carcinoma) dataset folder
-│   ├── fold1_test_labels.csv    # Test set labels for the 1st fold in 5-fold cross-validation
-│   ├── fold1_train_labels.csv   # Training set labels for the 1st fold in 5-fold cross-validation
-│   └── surv_time.csv            # Survival time and event information for survival analysis
-
-
-├── preprocessed/                # Preprocessed multi-omics feature data (standardized & filtered)
-│   ├── X_test_methyl.csv        # Test set: DNA methylation features
-│   ├── X_test_mirna.csv         # Test set: miRNA expression features
-│   ├── X_test_mrna.csv          # Test set: mRNA expression features
-│   ├── X_train_methyl.csv       # Training set: DNA methylation features
-│   ├── X_train_mirna.csv        # Training set: miRNA expression features
-│   └── X_train_mrna.csv         # Training set: mRNA expression features
 
 ## Usage
 
