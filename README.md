@@ -26,25 +26,22 @@ BOMIFA/
 │   ├── X_train_mirna.csv             # Training set: miRNA expression
 │   └── X_train_mrna.csv              # Training set: mRNA expression
 │
-├── core_modules/                     # Core functional modules (categorized)
-│   ├── attention_modules.py          # Attention mechanism layers (GNN/Transformer)
-│   ├── contrastive_learning.py       # Contrastive learning losses and modules
-│   ├── cox_loss.py                   # Cox loss function for survival analysis
-│   ├── gnn_modules.py                # Graph neural network (GNN) layer definitions
-│   ├── lmf_fusion.py                 # Low-rank multi-modal fusion (LMF)
-│   ├── transformer_fusion.py         # Single-modal Transformer encoder
-│   └── omics_fusion_model.py         # Detailed LMF implementation (fusion model)
-│
-├── pipeline/                         # Training and execution pipeline
-│   ├── training_pipeline.py          # BOMIFA end-to-end core pipeline
-│   ├── train_test.py                 # Training and testing loop functions
-│   ├── models.py                     # Complete BOMIFA model definition
-│   ├── processing.py                 # Data preprocessing pipeline
-│   └── utils.py                      # Utility functions (metrics, weights, adjacency matrices, etc.)
-│
 ├── main_bomifa.py                    # Main entry script (set hyperparameters and launch training)
-└── main_fine_marker.py               # Biomarker extraction and saliency analysis script
-
+├── main_fine_marker.py               # Biomarker extraction and saliency analysis script
+│
+├── attention_modules.py              # Attention mechanism layers (GNN/Transformer)
+├── contrastive_learning.py           # Contrastive learning losses and modules
+├── cox_loss.py                       # Cox loss function for survival analysis
+├── gnn_modules.py                    # Graph neural network (GNN) layer definitions
+├── lmf_fusion.py                     # Low-rank multi-modal fusion (LMF)
+├── transformer_fusion.py             # Single-modal Transformer encoder
+├── omics_fusion_model.py             # Detailed LMF implementation (fusion model)
+│
+├── training_pipeline.py              # BOMIFA end-to-end core pipeline
+├── train_test.py                     # Training and testing loop functions
+├── models.py                         # Complete BOMIFA model definition
+├── processing.py                     # Data preprocessing pipeline
+└── utils.py                          # Utility functions (metrics, weights, adjacency matrices, etc.)
 
 ```
 ## Usage
