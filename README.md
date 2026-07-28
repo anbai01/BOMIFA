@@ -45,6 +45,8 @@ BOMIFA/
 ├── main_bomifa.py                    # Main entry script (set hyperparameters and launch training)
 └── main_fine_marker.py               # Biomarker extraction and saliency analysis script
 
+
+```
 ## Usage
 
 
