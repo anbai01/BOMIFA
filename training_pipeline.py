@@ -2,6 +2,8 @@ import numpy as np
 import pandas as pd
 import torch
 import os
+
+from main_fine_marker import run_saliency
 from utils import (
     one_hot_tensor,
     cal_sample_weight,
@@ -113,7 +115,7 @@ def model_prepare(
     os.makedirs(iteration_folder, exist_ok=True)
 
     # 调用训练函数
-    train_test(
+    pred_labels=train_test(
         view_list=view_list,
         num_class=num_class,
         dim_he_list=dim_he_list,
@@ -144,3 +146,5 @@ def model_prepare(
         common_train=common_train,
         common_test=common_test
     )
+    num=0
+    run_saliency(data_train,adj_tr_list,dim_he_list,num,pred_labels,data_folder)

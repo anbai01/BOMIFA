@@ -4,8 +4,9 @@ import torch.nn as nn
 import numpy as np
 import pandas as pd
 import torch
-from Saliency分析模块 import TrainedModelSaliencyAnalyzer
-from models import GCN_E, Classifier, GCN_comp,all
+from Saliency import TrainedModelSaliencyAnalyzer
+from models import GCN_E, Classifier, ContrastiveTrainer,all
+from contrastive_learning import ContrastiveTrainer
 
 
 
@@ -31,12 +32,12 @@ def load_trained_model(in_dim, hgcn_dim, i, num, data_folder, dropout=0.4):
     gcn_e_model.load_state_dict(torch.load(gcn_e_model_path))
     gcn_e_model.eval()
 
-    trans_f_model = all(hgcn_dim[-1], 5, 1600, 10, 6,0.3)
+    trans_f_model = all(hgcn_dim[-1], 5, 1600, 10, 0.3)
     trans_f_model_path = f'./{data_folder}/models/{num}/H{i}.pth'
     trans_f_model.load_state_dict(torch.load(trans_f_model_path))
     trans_f_model.eval()
 
-    gcn_pare_model = GCN_comp(hgcn_dim[-1], 0.1)
+    gcn_pare_model = ContrastiveTrainer(hgcn_dim[-1], 0.1)
     gcn_pare_model_path = f'./{data_folder}/models/{num}/P{i}.pth'
     gcn_pare_model.load_state_dict(torch.load(gcn_pare_model_path))
     gcn_pare_model.eval()
@@ -54,7 +55,7 @@ def load_trained_model(in_dim, hgcn_dim, i, num, data_folder, dropout=0.4):
 
 # 2. 创建Saliency分析器
 
-def run_saliency(h, adj_T,dim_he_list,num,pred_label,data_folder='LUAD1', dropout = 0.1):
+def run_saliency(h, adj_T,dim_he_list,num,pred_label,data_folder='UCEC', dropout = 0.1):
     # 3. 准备数据
     # 假设x是特征矩阵，adj是邻接矩阵
     for i in range(3):
