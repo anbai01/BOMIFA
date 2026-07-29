@@ -3,6 +3,7 @@
 BOMIFA is an advanced computing framework specifically designed for predicting the prognosis of female patients with cancer. By integrating multiple types of omics data with biological pathway knowledge, BOMIFA is capable of providing accurate and understandable prediction results for cancer outcomes, as well as identifying significant clinical value biomarkers for female cancers.
 
 
+![Uploading 4e14c86ec332cde9fb7b1b8e1e91688.png…]()
 
 
 
