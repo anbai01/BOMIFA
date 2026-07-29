@@ -177,13 +177,24 @@ conda create -n bomifa python=3.9
 conda activate bomifa
 pip install -r requirements.txt
 ```
- 
+
 ## How to Reproduce the Analysis
-```bash
+
+### Place the required raw input files in the UCEC/ directory:
+ ```bash
+UCEC/
+├── mrna.csv                 # mRNA expression matrix (genes × samples)
+├── methylation.csv          # DNA methylation matrix (probes × samples)
+├── micrna.csv               # miRNA expression matrix (miRNAs × samples)
+├── fold1_train_labels.csv   # Training set labels for fold 1
+└── fold1_test_labels.csv    # Test set labels for fold 1
+```
+### run the model：
+ ```bash
 python main_bomifa.py
 
 ```
-
+###
 
 
 ## GPU/CPU Support
