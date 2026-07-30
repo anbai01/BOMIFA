@@ -115,7 +115,7 @@ def model_prepare(
     os.makedirs(iteration_folder, exist_ok=True)
 
     # 调用训练函数
-    pred_labels=train_test(
+    pred=train_test(
         view_list=view_list,
         num_class=num_class,
         dim_he_list=dim_he_list,
@@ -147,4 +147,4 @@ def model_prepare(
         common_test=common_test
     )
     num=0
-    run_saliency(data_train,adj_tr_list,dim_he_list,num,pred_labels,data_folder)
+    run_saliency(data_train,adj_tr_list,dim_he_list,num,pred,data_folder)
