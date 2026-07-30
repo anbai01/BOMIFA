@@ -207,6 +207,8 @@ PREPROCESSED/
 python main_bomifa.py
 
 ```
+###After training, the script automatically invokes Saliency.py to perform saliency analysis and extract top‑ranked biomarkers. The results (feature names and importance scores) are saved in the UCEC/marker/ directory.
+
 
 
 
