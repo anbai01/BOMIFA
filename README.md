@@ -223,6 +223,13 @@ usage: main_bomifa.py [-h] [--data_folder DATA_FOLDER]
                       [--rank RANK] [--lr_cross_attention LR_CROSS_ATTENTION]
                       [--lr_c LR_C] [--all_lr ALL_LR] [--num_classes NUM_CLASSES]    
  ```
+
+### Marker Genes Output
+Final filtered marker gene lists are saved under the directory:
+`./UCEC/marker/`
+- `0_features.csv`
+- `1_features.csv`
+- `2_features.csv`
 ## GPU/CPU Support
 The code automatically detects GPU availability:
 GPU available: Uses CUDA for training (recommended)
