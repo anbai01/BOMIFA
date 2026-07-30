@@ -37,7 +37,6 @@ BOMIFA/
 ├── lmf_fusion.py                     # Low-rank multi-modal fusion (LMF)
 ├── transformer_fusion.py             # Single-modal Transformer encoder
 ├── omics_fusion_model.py             # Detailed LMF implementation (fusion model)
-│
 ├── training_pipeline.py              # BOMIFA end-to-end core pipeline
 ├── train_test.py                     # Training and testing loop functions
 ├── models.py                         # Complete BOMIFA model definition
