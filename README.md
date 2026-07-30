@@ -190,12 +190,23 @@ UCEC/
 ├── fold1_train_labels.csv   # Training set labels for fold 1
 └── fold1_test_labels.csv    # Test set labels for fold 1
 ```
+### Use preprocessed data (recommended)
+ ```bash
+#Due to the large size of the raw data, we provide ready‑to‑use preprocessed multi‑omics files in the PREPROCESSED/ directory (you can place this folder in the project root). The files are:
+PREPROCESSED/
+├── X_train_mrna.csv
+├── X_train_methyl.csv
+├── X_train_mirna.csv
+├── X_test_mrna.csv
+├── X_test_methyl.csv
+└── X_test_mirna.csv
+```
 ### run the model：
  ```bash
 python main_bomifa.py
 
 ```
-###
+
 
 
 ## GPU/CPU Support
