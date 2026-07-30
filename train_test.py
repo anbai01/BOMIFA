@@ -227,8 +227,8 @@ def train_test(view_list, num_class, dim_he_list,
 
     print("\nTraining Transformers...")
 
-    df_surv = pd.read_csv('BOMIFA\\UCEC\\surv_time.csv')
-    df_surv.columns = ['Death', 'PatientID', 'Survival']  # 按列顺序重命名
+    df_surv = pd.read_csv('UCEC\\surv_time.csv')
+    df_surv.columns = ['PatientID', 'Survival']  # 按列顺序重命名
     print(df_surv)
     # 准备样本ID列表（common_train, common_test）
     # 直接合并生存信息
@@ -306,7 +306,7 @@ def train_test(view_list, num_class, dim_he_list,
             )
             print(f"\nTest: Epoch {epoch}")
             if num_class == 2:
-                accuracy, f1, auc_score, c_index = metrics(labels_trte[trte_idx["te"]], scores, test_times)
+                accuracy, f1, auc_score, c_index,pred_labels = metrics(labels_trte[trte_idx["te"]], scores, test_times)
 
                 if accuracy > best_accuracy:
                     best_accuracy = accuracy
@@ -336,3 +336,4 @@ def train_test(view_list, num_class, dim_he_list,
     plt.plot(range(final_epochs + 1), final_loss_history, marker='o')
     plt.savefig('./loss_final_training.png')
     plt.close()
+    return pred_labels
