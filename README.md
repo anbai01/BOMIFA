@@ -211,6 +211,7 @@ python main_bomifa.py
 
 
 ### main_bomifa.py accepts the following command‑line arguments. To see the full help, run:
+ ```bash
  python main_bomifa.py -h
 usage: main_bomifa.py [-h] [--data_folder DATA_FOLDER]
                       [--view_list VIEW_LIST [VIEW_LIST ...]]
@@ -221,7 +222,7 @@ usage: main_bomifa.py [-h] [--data_folder DATA_FOLDER]
                       [--cross_num_heads CROSS_NUM_HEADS] [--d_model D_MODEL]
                       [--rank RANK] [--lr_cross_attention LR_CROSS_ATTENTION]
                       [--lr_c LR_C] [--all_lr ALL_LR] [--num_classes NUM_CLASSES]    
-
+ ```
 ## GPU/CPU Support
 The code automatically detects GPU availability:
 GPU available: Uses CUDA for training (recommended)
