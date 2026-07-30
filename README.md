@@ -191,8 +191,9 @@ UCEC/
 └── fold1_test_labels.csv    # Test set labels for fold 1
 ```
 ### Use preprocessed data (recommended)
+#### Due to the large size of the raw data, we provide ready‑to‑use preprocessed multi‑omics files in the PREPROCESSED/ directory (you can place this folder in the project root). The files are:
  ```bash
-#Due to the large size of the raw data, we provide ready‑to‑use preprocessed multi‑omics files in the PREPROCESSED/ directory (you can place this folder in the project root). The files are:
+
 PREPROCESSED/
 ├── X_train_mrna.csv
 ├── X_train_methyl.csv
