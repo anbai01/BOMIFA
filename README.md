@@ -29,7 +29,7 @@ BOMIFA/
 │
 ├── main_bomifa.py                    # Main entry script (set hyperparameters and launch training)
 ├── main_fine_marker.py               # Biomarker extraction and saliency analysis script
-│
+├── Saliency.py                       # Saliency analysis module for model interpretability
 ├── attention_modules.py              # Attention mechanism layers (GNN/Transformer)
 ├── contrastive_learning.py           # Contrastive learning losses and modules
 ├── cox_loss.py                       # Cox loss function for survival analysis
