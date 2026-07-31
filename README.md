@@ -183,18 +183,6 @@ hsa-mir-1181	0.8715525
 
 
 
-
-<img width="209" height="309" alt="image" src="https://github.com/user-attachments/assets/eb50a825-02e8-49b3-8596-988cd413711c" />
-
-<img width="209" height="309" alt="image" src="https://github.com/user-attachments/assets/6a2602fa-07e9-49da-ad8b-bc0aa3bdd9f9" />
-
-
-
-
-
-
-
-
 ## Usage
 
 
