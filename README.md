@@ -25,6 +25,11 @@ BOMIFA/
 ├── UCEC/                             # Example dataset (Uterine Corpus Endometrial Carcinoma)
 │   ├── fold1_test_labels.csv         # Test set labels for fold 1
 │   ├── fold1_train_labels.csv        # Training set labels for fold 1
+│   ├── 0_featname.csv           # Full feature names for mRNA (used for saliency mapping)
+│   ├── 1_featname.csv           # Full feature names for methylation
+│   ├── 2_featname.csv           # Full feature names for miRNA
+│   ├── fold1_train_labels.csv   # Training set labels for fold 1
+│   ├── fold1_test_labels.csv    # Test set labels for fold 1
 │   └── surv_time.csv                 # Survival time and event information
 │
 ├── preprocessed/                     # Preprocessed multi-omics feature data
@@ -75,10 +80,10 @@ UCEC/
 ├── methylation.csv          # DNA methylation matrix (probes × samples)
 ├── micrna.csv               # miRNA expression matrix (miRNAs × samples)
 ├── fold1_train_labels.csv   # Training set labels for fold 1
-└── fold1_test_labels.csv    # Test set labels for fold 1
-├── 0_features.csv       # Filtered feature list for cluster/subtype 0
-├── 1_features.csv       # Filtered feature list for cluster/subtype 1
-└── 2_features.csv       # Filtered feature list for cluster/subtype 2
+├── fold1_test_labels.csv    # Test set labels for fold 1
+├── 0_featname.csv           # Full feature names for mRNA (used for saliency mapping)
+├── 1_featname.csv           # Full feature names for methylation
+├── 2_featname.csv           # Full feature names for miRNA
 └──surv_time.csv  
 ```
 ### Use preprocessed data (recommended)
