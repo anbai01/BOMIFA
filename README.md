@@ -43,6 +43,116 @@ BOMIFA/
 └── utils.py                          # Utility functions (metrics, weights, adjacency matrices, etc.)
 
 ```
+
+
+
+## Framework
+<img width="971" height="508" alt="image" src="https://github.com/user-attachments/assets/91464bbe-a038-4f88-b58e-80b35a4a80fa" />
+
+The BOMIFA framework takes three types of multi-omics data (mRNA expression, miRNA expression, and DNA methylation) as input. Each modality first undergoes feature extraction through graph convolution (Graph Conv), Leaky ReLU activation, and dropout operations, followed by representation learning via the Contrastive Transformer (CL-transformer) module. In this module, data augmentation generates multiple views of the input features, which are then processed by a graph convolutional network (GCN) and optimized using contrastive loss to learn robust single-modal representations. Subsequently, features from all three modalities are fed into a cross-attention module, where query, key, and value matrices are generated via linear projections. Attention weights are computed through matrix multiplication and scaled softmax, enabling effective inter-modal information interaction. Finally, outputs from each modality-specific classifier and the cross-attention module are integrated into the Low-Rank Multi-modal Fusion (LMF) block, which performs the ultimate multi-omics feature fusion to produce the final prediction.
+
+
+
+
+
+## Requirements
+- Python 3.9+  We do not recommend using Python versions higher than 3.11, as they often lead to dependency conflicts between deep learning frameworks including TensorFlow, PyTorch, and DGL.
+- Tensorflow==2.18+
+- Other dependencies listed in `requirements.txt`
+```bash
+git clone https://github.com/anbai01/BOMIFA.git
+conda create -n bomifa python=3.9
+conda activate bomifa
+pip install -r requirements.txt
+```
+
+## How to use this tool：
+
+### Place the required raw input files in the UCEC/ directory:
+ ```bash
+UCEC/
+├── mrna.csv                 # mRNA expression matrix (genes × samples)
+├── methylation.csv          # DNA methylation matrix (probes × samples)
+├── micrna.csv               # miRNA expression matrix (miRNAs × samples)
+├── fold1_train_labels.csv   # Training set labels for fold 1
+└── fold1_test_labels.csv    # Test set labels for fold 1
+├── 0_features.csv       # Filtered feature list for cluster/subtype 0
+├── 1_features.csv       # Filtered feature list for cluster/subtype 1
+└── 2_features.csv       # Filtered feature list for cluster/subtype 2
+└──surv_time.csv  
+```
+### Use preprocessed data (recommended)
+#### Due to the large size of the raw data, we provide ready‑to‑use preprocessed multi‑omics files in the PREPROCESSED/ directory (you can place this folder in the project root). The files are:
+ ```bash
+
+PREPROCESSED/
+├── X_train_mrna.csv
+├── X_train_methyl.csv
+├── X_train_mirna.csv
+├── X_test_mrna.csv
+├── X_test_methyl.csv
+└── X_test_mirna.csv
+```
+### Run the model：
+ ```bash
+python main_bomifa.py
+
+```
+#### Model Evaluation Metrics
+During model training, test set metrics are printed at each epoch, including F1 score, Accuracy (ACC), AUC and Concordance Index (C-index) for survival prediction.
+Example console output:
+ ```bash
+Test: Epoch 
+Test F1: 
+Test ACC1:
+Test AUC:
+Test C-INDEX:
+ ```
+#### After training, the script automatically invokes Saliency.py to perform saliency analysis and extract top‑ranked biomarkers. The results (feature names and importance scores) are saved in the UCEC/marker/.
+
+
+### main_bomifa.py accepts the following command‑line arguments. To see the full help, run:
+ ```bash
+ python main_bomifa.py -h
+usage: main_bomifa.py [-h] [--data_folder DATA_FOLDER]
+                      [--view_list VIEW_LIST [VIEW_LIST ...]]
+                      [--num_epoch_pretrain NUM_EPOCH_PRETRAIN]
+                      [--transformer_epochs TRANSFORMER_EPOCHS] [--lr_e_gcn LR_E_GCN]   
+                      [--lr_e_cl_transformer LR_E_CL_TRANSFORMER] [--n_head N_HEAD]     
+                      [--d_ff D_FF] [--num_layers NUM_LAYERS]
+                      [--cross_num_heads CROSS_NUM_HEADS] [--d_model D_MODEL]
+                      [--rank RANK] [--lr_cross_attention LR_CROSS_ATTENTION]
+                      [--lr_c LR_C] [--all_lr ALL_LR] [--num_classes NUM_CLASSES]    
+ ```
+
+### Marker Genes Output
+Final filtered marker gene lists are saved under the directory:
+`./UCEC/marker/`
+- `0_features.csv`
+- `1_features.csv`
+- `2_features.csv`
+
+### Example content of 0_features.csv (top 10 features shown, ranked by importance)
+```bash
+feature_name	importance
+ENSG00000236054.1	1.3456509
+ENSG00000278317.1	1.2892737
+ENSG00000252258.1	1.2818351
+ENSG00000248826.2	1.1951966
+ENSG00000237525.7	1.1387562
+ENSG00000259734.1	1.1228423
+ENSG00000286006.2	1.1180277
+ENSG00000243674.1	1.0469915
+ENSG00000267591.1	1.0240933
+ENSG00000213091.2	1.0034016
+```
+feature_name: A unique identifier for the feature 
+importance: The saliency score – higher values mean greater contribution to the prediction.
+
+
+
+
+
 ## Usage
 
 
@@ -158,100 +268,6 @@ This function performs global saliency analysis on three omics modalities (mRNA,
 
 
 
-## Framework
-<img width="971" height="508" alt="image" src="https://github.com/user-attachments/assets/91464bbe-a038-4f88-b58e-80b35a4a80fa" />
-
-The BOMIFA framework takes three types of multi-omics data (mRNA expression, miRNA expression, and DNA methylation) as input. Each modality first undergoes feature extraction through graph convolution (Graph Conv), Leaky ReLU activation, and dropout operations, followed by representation learning via the Contrastive Transformer (CL-transformer) module. In this module, data augmentation generates multiple views of the input features, which are then processed by a graph convolutional network (GCN) and optimized using contrastive loss to learn robust single-modal representations. Subsequently, features from all three modalities are fed into a cross-attention module, where query, key, and value matrices are generated via linear projections. Attention weights are computed through matrix multiplication and scaled softmax, enabling effective inter-modal information interaction. Finally, outputs from each modality-specific classifier and the cross-attention module are integrated into the Low-Rank Multi-modal Fusion (LMF) block, which performs the ultimate multi-omics feature fusion to produce the final prediction.
-
-
-
-
-
-## Requirements
-- Python 3.9+  We do not recommend using Python versions higher than 3.11, as they often lead to dependency conflicts between deep learning frameworks including TensorFlow, PyTorch, and DGL.
-- Tensorflow==2.18+
-- Other dependencies listed in `requirements.txt`
-```bash
-git clone https://github.com/anbai01/BOMIFA.git
-conda create -n bomifa python=3.9
-conda activate bomifa
-pip install -r requirements.txt
-```
-
-## How to Reproduce the Analysis
-
-### Place the required raw input files in the UCEC/ directory:
- ```bash
-UCEC/
-├── mrna.csv                 # mRNA expression matrix (genes × samples)
-├── methylation.csv          # DNA methylation matrix (probes × samples)
-├── micrna.csv               # miRNA expression matrix (miRNAs × samples)
-├── fold1_train_labels.csv   # Training set labels for fold 1
-└── fold1_test_labels.csv    # Test set labels for fold 1
-├── 0_features.csv       # Filtered feature list for cluster/subtype 0
-├── 1_features.csv       # Filtered feature list for cluster/subtype 1
-└── 2_features.csv       # Filtered feature list for cluster/subtype 2
-└──surv_time.csv  
-```
-### Use preprocessed data (recommended)
-#### Due to the large size of the raw data, we provide ready‑to‑use preprocessed multi‑omics files in the PREPROCESSED/ directory (you can place this folder in the project root). The files are:
- ```bash
-
-PREPROCESSED/
-├── X_train_mrna.csv
-├── X_train_methyl.csv
-├── X_train_mirna.csv
-├── X_test_mrna.csv
-├── X_test_methyl.csv
-└── X_test_mirna.csv
-```
-### Run the model：
- ```bash
-python main_bomifa.py
-
-```
-
-
-
-
-#### After training, the script automatically invokes Saliency.py to perform saliency analysis and extract top‑ranked biomarkers. The results (feature names and importance scores) are saved in the UCEC/marker/.
-
-
-### main_bomifa.py accepts the following command‑line arguments. To see the full help, run:
- ```bash
- python main_bomifa.py -h
-usage: main_bomifa.py [-h] [--data_folder DATA_FOLDER]
-                      [--view_list VIEW_LIST [VIEW_LIST ...]]
-                      [--num_epoch_pretrain NUM_EPOCH_PRETRAIN]
-                      [--transformer_epochs TRANSFORMER_EPOCHS] [--lr_e_gcn LR_E_GCN]   
-                      [--lr_e_cl_transformer LR_E_CL_TRANSFORMER] [--n_head N_HEAD]     
-                      [--d_ff D_FF] [--num_layers NUM_LAYERS]
-                      [--cross_num_heads CROSS_NUM_HEADS] [--d_model D_MODEL]
-                      [--rank RANK] [--lr_cross_attention LR_CROSS_ATTENTION]
-                      [--lr_c LR_C] [--all_lr ALL_LR] [--num_classes NUM_CLASSES]    
- ```
-
-### Marker Genes Output
-Final filtered marker gene lists are saved under the directory:
-`./UCEC/marker/`
-- `0_features.csv`
-- `1_features.csv`
-- `2_features.csv`
-
-### Example content of 0_features.csv (top 10 features shown, ranked by importance)
-```bash
-feature_name	importance
-ENSG00000236054.1	1.3456509
-ENSG00000278317.1	1.2892737
-ENSG00000252258.1	1.2818351
-ENSG00000248826.2	1.1951966
-ENSG00000237525.7	1.1387562
-ENSG00000259734.1	1.1228423
-ENSG00000286006.2	1.1180277
-ENSG00000243674.1	1.0469915
-ENSG00000267591.1	1.0240933
-ENSG00000213091.2	1.0034016
-```
 ## GPU/CPU Support
 The code automatically detects GPU availability:
 GPU available: Uses CUDA for training (recommended)
