@@ -98,19 +98,6 @@ PREPROCESSED/
 python main_bomifa.py
 
 ```
-#### Model Evaluation Metrics
-During model training, test set metrics are printed at each epoch, including F1 score, Accuracy (ACC), AUC and Concordance Index (C-index) for survival prediction.
-Example console output:
- ```bash
-Test: Epoch 
-Test F1: 
-Test ACC1:
-Test AUC:
-Test C-INDEX:
- ```
-#### After training, the script automatically invokes Saliency.py to perform saliency analysis and extract top‑ranked biomarkers. The results (feature names and importance scores) are saved in the UCEC/marker/.
-
-
 ### main_bomifa.py accepts the following command‑line arguments. To see the full help, run:
  ```bash
  python main_bomifa.py -h
@@ -124,6 +111,20 @@ usage: main_bomifa.py [-h] [--data_folder DATA_FOLDER]
                       [--rank RANK] [--lr_cross_attention LR_CROSS_ATTENTION]
                       [--lr_c LR_C] [--all_lr ALL_LR] [--num_classes NUM_CLASSES]    
  ```
+#### Model Evaluation Metrics
+During model training, test set metrics are printed at each epoch, including F1 score, Accuracy (ACC), AUC and Concordance Index (C-index) for survival prediction.
+Example console output:
+ ```bash
+Test: Epoch 
+Test F1: 
+Test ACC1:
+Test AUC:
+Test C-INDEX:
+ ```
+#### After training, the script automatically invokes Saliency.py to perform saliency analysis and extract top‑ranked biomarkers. The results (feature names and importance scores) are saved in the UCEC/marker/.
+
+
+
 
 ### Marker Genes Output
 Final filtered marker gene lists are saved under the directory:
