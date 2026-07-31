@@ -129,11 +129,10 @@ Test C-INDEX:
 ### Marker Genes Output
 Final filtered marker gene lists are saved under the directory:
 `./UCEC/marker/`
-- `0_features.csv`
-- `1_features.csv`
-- `2_features.csv`
-
-### Example content of 0_features.csv (top 10 features shown, ranked by importance)
+0_features.csv – important markers identified from mRNA expression data
+1_features.csv – important markers identified from DNA methylation data
+2_features.csv – important markers identified from miRNA expression data
+### Example content of 0_features.csv (mRNA, top 10 features shown, ranked by importance)
 ```bash
 feature_name	importance
 ENSG00000236054.1	1.3456509
@@ -147,8 +146,50 @@ ENSG00000243674.1	1.0469915
 ENSG00000267591.1	1.0240933
 ENSG00000213091.2	1.0034016
 ```
+### Example content of 1_features.csv (methylation, top 10 features shown, ranked by importance)
+
+```bash
+feature_name	importance
+cg05462236	1.1118071
+cg24207616	1.076387
+cg11753771	0.9999563
+cg19523029	0.94767946
+cg13728003	0.9268874
+cg13651986	0.9215557
+cg23694187	0.9067134
+cg06317803	0.8951645
+cg14993167	0.8761975
+cg24864831	0.8727188
+```
+### Example content of 2_features.csv (miRNA, top 10 features shown, ranked by importance)
+
+
+```bash
+
+feature_name	importance
+hsa-mir-599	1.2169006
+hsa-mir-3941	1.1117061
+hsa-mir-4684	1.0730591
+hsa-mir-6774	0.99189335
+hsa-mir-4434	0.9726206
+hsa-mir-4423	0.944213
+hsa-mir-6733	0.89460856
+hsa-mir-3660	0.89249796
+hsa-mir-3146	0.8750569
+hsa-mir-1181	0.8715525
+```
 #### feature_name: A unique identifier for the feature 
 #### importance: The saliency score – higher values mean greater contribution to the prediction.
+
+
+
+
+<img width="209" height="309" alt="image" src="https://github.com/user-attachments/assets/eb50a825-02e8-49b3-8596-988cd413711c" />
+
+<img width="209" height="309" alt="image" src="https://github.com/user-attachments/assets/6a2602fa-07e9-49da-ad8b-bc0aa3bdd9f9" />
+
+
+
 
 
 
