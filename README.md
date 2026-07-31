@@ -1,4 +1,4 @@
-
+<img width="971" height="508" alt="image" src="https://github.com/user-attachments/assets/91464bbe-a038-4f88-b58e-80b35a4a80fa" />
 # BOMIFA
 BOMIFA is an advanced computing framework specifically designed for predicting the prognosis of female patients with cancer. By integrating multiple types of omics data with biological pathway knowledge, BOMIFA is capable of providing accurate and understandable prediction results for cancer outcomes, as well as identifying significant clinical value biomarkers for female cancers.
 
@@ -210,6 +210,10 @@ PREPROCESSED/
 python main_bomifa.py
 
 ```
+
+
+
+
 #### After training, the script automatically invokes Saliency.py to perform saliency analysis and extract top‑ranked biomarkers. The results (feature names and importance scores) are saved in the UCEC/marker/.
 
 
@@ -233,6 +237,21 @@ Final filtered marker gene lists are saved under the directory:
 - `0_features.csv`
 - `1_features.csv`
 - `2_features.csv`
+
+### Example content of 0_features.csv (top 10 features shown, ranked by importance)
+```bash
+feature_name	importance
+ENSG00000236054.1	1.3456509
+ENSG00000278317.1	1.2892737
+ENSG00000252258.1	1.2818351
+ENSG00000248826.2	1.1951966
+ENSG00000237525.7	1.1387562
+ENSG00000259734.1	1.1228423
+ENSG00000286006.2	1.1180277
+ENSG00000243674.1	1.0469915
+ENSG00000267591.1	1.0240933
+ENSG00000213091.2	1.0034016
+```
 ## GPU/CPU Support
 The code automatically detects GPU availability:
 GPU available: Uses CUDA for training (recommended)
