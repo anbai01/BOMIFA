@@ -5,6 +5,15 @@ BOMIFA is an advanced computing framework specifically designed for predicting t
 
 
 
+## Framework
+<img width="971" height="508" alt="image" src="https://github.com/user-attachments/assets/91464bbe-a038-4f88-b58e-80b35a4a80fa" />
+
+The BOMIFA framework takes three types of multi-omics data (mRNA expression, miRNA expression, and DNA methylation) as input. Each modality first undergoes feature extraction through graph convolution (Graph Conv), Leaky ReLU activation, and dropout operations, followed by representation learning via the Contrastive Transformer (CL-transformer) module. In this module, data augmentation generates multiple views of the input features, which are then processed by a graph convolutional network (GCN) and optimized using contrastive loss to learn robust single-modal representations. Subsequently, features from all three modalities are fed into a cross-attention module, where query, key, and value matrices are generated via linear projections. Attention weights are computed through matrix multiplication and scaled softmax, enabling effective inter-modal information interaction. Finally, outputs from each modality-specific classifier and the cross-attention module are integrated into the Low-Rank Multi-modal Fusion (LMF) block, which performs the ultimate multi-omics feature fusion to produce the final prediction.
+
+
+
+
+
 
 ## Repository Structure
 
@@ -43,15 +52,6 @@ BOMIFA/
 └── utils.py                          # Utility functions (metrics, weights, adjacency matrices, etc.)
 
 ```
-
-
-
-## Framework
-<img width="971" height="508" alt="image" src="https://github.com/user-attachments/assets/91464bbe-a038-4f88-b58e-80b35a4a80fa" />
-
-The BOMIFA framework takes three types of multi-omics data (mRNA expression, miRNA expression, and DNA methylation) as input. Each modality first undergoes feature extraction through graph convolution (Graph Conv), Leaky ReLU activation, and dropout operations, followed by representation learning via the Contrastive Transformer (CL-transformer) module. In this module, data augmentation generates multiple views of the input features, which are then processed by a graph convolutional network (GCN) and optimized using contrastive loss to learn robust single-modal representations. Subsequently, features from all three modalities are fed into a cross-attention module, where query, key, and value matrices are generated via linear projections. Attention weights are computed through matrix multiplication and scaled softmax, enabling effective inter-modal information interaction. Finally, outputs from each modality-specific classifier and the cross-attention module are integrated into the Low-Rank Multi-modal Fusion (LMF) block, which performs the ultimate multi-omics feature fusion to produce the final prediction.
-
-
 
 
 
