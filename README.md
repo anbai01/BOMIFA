@@ -66,11 +66,20 @@ BOMIFA/
 - Other dependencies listed in `requirements.txt`
 ```bash
 git clone https://github.com/anbai01/BOMIFA.git
+```
+## Create the environment
+```bash
 conda create -n bomifa python=3.9
 conda activate bomifa
+```
+##  Install dependencies
+```bash
 pip install -r requirements.txt
 ```
-
+## Run the example
+python main_bomifa.py \
+  --data_folder ./UCEC \
+  --view_list mrna methylation mirna
 ## How to use this tool：
 
 ### Place the required raw input files in the UCEC/ directory:
