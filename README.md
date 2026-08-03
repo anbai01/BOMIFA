@@ -59,28 +59,32 @@ BOMIFA/
 
 ```
 
-
-
-## Requirements
-- Python 3.9+  We do not recommend using Python versions higher than 3.11, as they often lead to dependency conflicts between deep learning frameworks including TensorFlow, PyTorch, and DGL.
-- Tensorflow==2.18+
-- Other dependencies listed in `requirements.txt`
-```bash
+# Quick Start
+The following workflow uses the preprocessed UCEC example data included in this repository.
+## 1. Clone the repository
 git clone https://github.com/anbai01/BOMIFA.git
-```
-## Create the environment
-```bash
+cd BOMIFA
+## 2. Create the environment
 conda create -n bomifa python=3.9
 conda activate bomifa
-```
-##  Install dependencies
-```bash
+## 3. Install dependencies
 pip install -r requirements.txt
-```
-## Run the example
+## 4. Run the example
 python main_bomifa.py \
   --data_folder ./UCEC \
-  --view_list mrna methylation mirna
+
+## Requirements
+- Python 3.9+  We do not recommend using Python versions higher than 3.11, as they often lead to dependency conflicts between deep learning frameworks including TensorFlow, PyTorch, and DGL.##
+## Main dependencies
+TensorFlow ==2.18.0
+PyTorch ==2.2.0
+DGL ==1.1.2
+NumPy ==1.26.4
+pandas ==2.2.2
+scikit-learn ==1.5.1
+lifelines ==0.29.0
+- Other dependencies listed in `requirements.txt`
+
 ## How to use this tool：
 
 ### Place the required raw input files in the UCEC/ directory:
