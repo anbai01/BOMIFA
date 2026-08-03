@@ -85,9 +85,13 @@ scikit-learn ==1.5.1
 lifelines ==0.29.0
 - Other dependencies listed in `requirements.txt`
 
-## How to use this tool：
+## Recommended reproducible installation
+conda env create -f environment.yml
+conda activate bomifa
 
-### Place the required raw input files in the UCEC/ directory:
+## Repository Structure
+### Input Data Specifications
+BOMIFA uses three omics matrices and corresponding outcome labels.
  ```bash
 UCEC/
 ├── mrna.csv                 # mRNA expression matrix (genes × samples)
@@ -100,6 +104,19 @@ UCEC/
 ├── 2_featname.csv           # Full feature names for miRNA
 └──surv_time.csv  
 ```
+Recommended omic-data format**Example (miRNA expression matrix)**：
+ ```bash
+Ensembl_ID	TCGA-AJ-A3NH	TCGA-SL-A6J9	TCGA-AJ-A8CW	TCGA-AX-A3GI
+hsa-let-7a-1	12.62750927	12.32609183	13.84191944	12.35855423
+hsa-let-7a-2	12.62163327	12.33025323	13.82986345	12.34579788
+hsa-let-7a-3	12.62603131	12.33025323	13.86777909	12.37162985
+
+```
+
+## Minimal Runnable Example
+This minimal example allows users to verify the installation and complete the full workflow without downloading the complete UCEC dataset.
+
+
 ### Use preprocessed data (recommended)
 #### Due to the large size of the raw data, we provide ready‑to‑use preprocessed multi‑omics files in the PREPROCESSED/ directory (you can place this folder in the project root). The files are:
  ```bash
@@ -251,6 +268,31 @@ python main_bomifa.py
 | lr_c                     | Learning rate for the classifier layer                                      |
 | all_lr                   | Learning rate for the joint training of the entire model                    |
 | num_classes              | Number of classes for the classification task (binary classification)       |
+
+
+## Applying BOMIFA to a New Dataset
+Step 1. Prepare the input files
+Create a new dataset directory:
+data/MY_DATASET/
+├── mrna.csv
+├── methylation.csv
+├── mirna.csv
+├── train_labels.csv
+├── test_labels.csv
+├── surv_time.csv
+├── 0_featname.csv
+├── 1_featname.csv
+└── 2_featname.csv
+Step 2. Run preprocessing
+python processing.py \
+  --data_folder ./data/MY_DATASET \
+  --output_folder ./preprocessed/MY_DATASET
+Step 3. Train and evaluate the model
+python main_bomifa.py \
+  --dataset MY_DATASET \
+  --data_folder ./preprocessed/MY_DATASET \
+  --view_list mrna methylation mirna \
+  --seed 42
 
 
 
