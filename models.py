@@ -37,7 +37,6 @@ def init_model_dict(num_view, dim_list, dim_he_list,nhead,d_ff,num_layer, cross_
                     rank,gcn_dopout=0.3,comp_dopout=0.1,h_dopout=0.1,cross_dopout=0.1,output=1):
     model_dict = {}
     for i in range(num_view):
-        #这里有改动2被我改成了1
         model_dict["E{:}".format(i+1)] = GCN_E(dim_list[i], dim_he_list, gcn_dopout)
         model_dict["C{:}".format(i+1)] = Classifier(dim_he_list[-1], output)
         model_dict["P{:}".format(i+1)] = ContrastiveTrainer(dim_he_list[-1],comp_dopout)

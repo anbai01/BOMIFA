@@ -57,7 +57,7 @@ def contrastive_loss_wo_cross_network(h1, h2, ho):
     return intra1 + intra2
 
 
-# 随机特征掩码
+
 def random_feature_mask(input_feature, drop_percent, device=torch.device('cuda')):
     p = torch.ones(input_feature.shape, dtype=torch.float).bernoulli_(1 - drop_percent).to(device)
     aug_feature = input_feature * p
@@ -69,9 +69,9 @@ def random_edge_pert_adj(adj: torch.Tensor,
                          pert_percent: float = 0.1,
                          minority_class: int = None,
                          protection_factor: float = 5.0,
-                         max_candidates: int = 1000000):  # 新增最大候选边限制
+                         max_candidates: int = 1000000): 
 
-    # 确保张量是合并的
+    
     adj = adj.coalesce()
     idx, val = adj.indices(), adj.values()
     N = adj.shape[0]

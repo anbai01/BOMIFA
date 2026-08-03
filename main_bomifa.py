@@ -1,5 +1,3 @@
-
-
 import argparse
 from training_pipeline import model_prepare
 
@@ -21,24 +19,27 @@ if __name__ == "__main__":
     parser.add_argument("--lr_c", type=float, default=8e-6)
     parser.add_argument("--all_lr", type=float, default=1e-6)
     parser.add_argument("--num_classes", type=int, default=2)
+    parser.add_argument("--output_folder", type=str, default="./preprocessed",
+                        help="Folder containing preprocessed CSV files (X_train_*.csv, X_test_*.csv)")
 
     args = parser.parse_args()
 
     model_prepare(
-        args.data_folder,
-        args.view_list,
-        args.num_classes,
-        args.lr_e_gcn,
-        args.lr_e_cl_transformer,
-        args.n_head,
-        args.d_ff,
-        args.num_layers,
-        args.cross_num_heads,
-        args.d_model,
-        args.rank,
-        args.lr_cross_attention,
-        args.lr_c,
-        args.all_lr,
-        args.num_epoch_pretrain,
-        args.transformer_epochs
+        data_folder=args.data_folder,
+        view_list=args.view_list,
+        num_class=args.num_classes,
+        lr_e_gcn=args.lr_e_gcn,
+        lr_e_cl_transformer=args.lr_e_cl_transformer,
+        nhead=args.n_head,
+        d_ff=args.d_ff,
+        num_layers=args.num_layers,
+        cross_num_heads=args.cross_num_heads,
+        d_model=args.d_model,
+        rank=args.rank,
+        lr_cross_attention=args.lr_cross_attention,
+        lr_c=args.lr_c,
+        all_lr=args.all_lr,
+        num_epoch_pretrain=args.num_epoch_pretrain,
+        transformer_epochs=args.transformer_epochs,
+        output_folder=args.output_folder
     )

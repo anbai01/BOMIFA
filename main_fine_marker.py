@@ -50,7 +50,7 @@ def load_trained_model(in_dim, hgcn_dim, i, num, data_folder, dropout=0.4):
     return combined_model
 
 
-def run_saliency(h, adj_T, dim_he_list, num, pred_label, data_folder='UCEC', dropout=0.1):
+def run_saliency(h, adj_T, dim_he_list, num, pred_label, data_folder='preprocessed', dropout=0.1):
     for i in range(3):
         x = h[i]
         adj = adj_T[i]

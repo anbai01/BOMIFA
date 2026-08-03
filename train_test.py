@@ -15,7 +15,7 @@ os.environ['CUDA_LAUNCH_BLOCKING'] = '1'
 CUDA_AVAILABLE = torch.cuda.is_available()
 
 def train_epoch_gnn(data_list, adj_list, label, model_dict, optim_dict):
-    """训练GNN epoch"""
+    """Train GNN epoch"""
     for model in model_dict.values():
         model.train()
 
@@ -33,7 +33,7 @@ def train_epoch_gnn(data_list, adj_list, label, model_dict, optim_dict):
     return losses
 
 def train_epoch_transform(data_list, adj_list, label, model_dict, optim_dict, loss_balancer):
-    """训练Transformer epoch"""
+    """Train Transformer epoch"""
     for model in model_dict.values():
         model.train()
 
@@ -56,7 +56,7 @@ def train_epoch_transform(data_list, adj_list, label, model_dict, optim_dict, lo
     return losses
 
 def train_cross_attention(data_list, adj_list, label, model_dict, optim_dict):
-    """训练交叉注意力"""
+    """Train cross attention"""
     for model in model_dict.values():
         model.train()
 
@@ -82,7 +82,7 @@ def train_cross_attention(data_list, adj_list, label, model_dict, optim_dict):
 
 
 def train_epoch_final(data_list, adj_list, label, one_hot_label, sample_weight, model_dict, optim_dict):
-    """最终训练epoch"""
+    """Final training epoch"""
     for model in model_dict.values():
         model.train()
 
@@ -112,7 +112,7 @@ def train_epoch_final(data_list, adj_list, label, one_hot_label, sample_weight, 
     return loss
 
 def train_epoch_all(data_list, adj_list, label, one_hot_label, sample_weight, model_dict, optim_dict):
-    """完整训练epoch"""
+    """Full training epoch"""
     for model in model_dict.values():
         model.train()
 
@@ -142,7 +142,7 @@ def train_epoch_all(data_list, adj_list, label, one_hot_label, sample_weight, mo
     return loss
 
 def test_epoch(test_label, data_list, adj_list, test_indices, model_dict, threshold=None):
-    """测试epoch"""
+    """Test epoch"""
     for model in model_dict.values():
         model.eval()
 
@@ -176,8 +176,9 @@ def train_test(view_list, num_class, dim_he_list,
                all_lr, num_epoch_pretrain, transformer_epochs, adj_tr_list, adj_te_list,
                dim_list, onehot_labels_tr_tensor, labels_tr_tensor,
                sample_weight_tr, fold_data_train, fold_data_trte, labels_trte,
-               trte_idx, iteration_folder,common_train,common_test):
-    """主训练测试函数"""
+               trte_idx, iteration_folder,common_train,common_test,
+               data_folder):
+    """Main train test function"""
 
     num_view = len(view_list)
     model_dict = init_model_dict(
@@ -191,7 +192,7 @@ def train_test(view_list, num_class, dim_he_list,
 
     print("\nPretraining GCNs...")
 
-    # 训练历史记录
+    # Training history
     gnn_loss_history = [[] for _ in range(num_view)]
     transformer_loss_history = [[] for _ in range(num_view)]
     cross_loss_history = []
@@ -227,11 +228,13 @@ def train_test(view_list, num_class, dim_he_list,
 
     print("\nTraining Transformers...")
 
-    df_surv = pd.read_csv('UCEC\\surv_time.csv')
-    df_surv.columns = ['PatientID', 'Survival']  # 按列顺序重命名
+    df_path = os.path.join(data_folder, "surv_time.csv")   # Construct path from data_folder
+    df_surv = pd.read_csv(df_path)
+
+    df_surv.columns = ['PatientID', 'Survival']  # Rename by column order
     print(df_surv)
-    # 准备样本ID列表（common_train, common_test）
-    # 直接合并生存信息
+    # Prepare sample ID lists (common_train, common_test)
+    # Merge survival information directly
     train_surv = pd.DataFrame({'PatientID': common_train}).merge(df_surv, on='PatientID', how='left')
     test_surv = pd.DataFrame({'PatientID': common_test}).merge(df_surv, on='PatientID', how='left')
     test_times = test_surv['Survival'].values
@@ -290,7 +293,7 @@ def train_test(view_list, num_class, dim_he_list,
 
     print("\nFinal Training...")
 
-    # 第四阶段：最终训练
+    # Stage 4: Final training
     final_epochs = 200
     for epoch in range(final_epochs + 1):
         loss1 = train_epoch_final(fold_data_train, adj_tr_list, labels_tr_tensor,
@@ -318,7 +321,7 @@ def train_test(view_list, num_class, dim_he_list,
                     }])
                     df_results.to_csv('best_results.csv', index=False)
 
-                    # 保存模型
+                    # Save models
                     for model_key, model in model_dict.items():
                         if CUDA_AVAILABLE:
                             state_dict = {k: v.cpu() for k, v in model.state_dict().items()}
@@ -327,7 +330,7 @@ def train_test(view_list, num_class, dim_he_list,
                         torch.save(state_dict, f'{iteration_folder}/{model_key}.pth')
                         # print(f'Saved {model_key} model parameters')
 
-    # 绘制最终损失
+    # Plot final loss
     plt.figure()
     plt.title('Final Training Loss')
     plt.xlabel('Epoch')
