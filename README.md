@@ -6,7 +6,6 @@ BOMIFA is an advanced computing framework specifically designed for predicting t
 
 
 ## Framework
-<img width="971" height="508" alt="image" src="https://github.com/user-attachments/assets/91464bbe-a038-4f88-b58e-80b35a4a80fa" />
 <img width="1943" height="1013" alt="58beeb3dd3e9d274919dc9ac489b8ba" src="https://github.com/user-attachments/assets/6ecfd731-f77b-4afe-b03b-8c3768b9f5ea" />
 
 
