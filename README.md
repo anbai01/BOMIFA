@@ -295,13 +295,17 @@ data/MY_DATASET/
 ```bash
 python processing.py \
   --data_folder ./data/MY_DATASET \
-  --output_folder ./preprocessed/MY_DATASET
+  --output_folder ./preprocessed/MY_DATASET \
+--top_k 100
+
 ```
 ### Step 3. Train and evaluate the model
 ```bash
 python main_bomifa.py \
   --dataset MY_DATASET \
   --data_folder ./preprocessed/MY_DATASET \
+  --train_labels my_train.csv \
+  --test_labels my_test.csv"
 ```
 
 
