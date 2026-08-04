@@ -1,19 +1,16 @@
 # BOMIFA
-BOMIFA is an advanced computing framework specifically designed for predicting the prognosis of female patients with cancer. By integrating multiple types of omics data with biological pathway knowledge, BOMIFA is capable of providing accurate and understandable prediction results for cancer outcomes, as well as identifying significant clinical value biomarkers for female cancers.
-
+Biologically Informed Multi-Omics Integration with Graph Contrastive Learning for Women's Cancer Prognosis
 ![4e14c86ec332cde9fb7b1b8e1e91688.png](4e14c86ec332cde9fb7b1b8e1e91688.png)
+
+## Overview
+BOMIFA is a biologically informed deep learning framework that integrates mRNA expression, miRNA expression, and DNA methylation data for cancer prognosis prediction in women.
 
 
 
 ## Framework
 <img width="1943" height="1013" alt="58beeb3dd3e9d274919dc9ac489b8ba" src="https://github.com/user-attachments/assets/6ecfd731-f77b-4afe-b03b-8c3768b9f5ea" />
 
-
-The BOMIFA framework takes three types of multi-omics data (mRNA expression, miRNA expression, and DNA methylation) as input. Each modality first undergoes feature extraction through graph convolution (Graph Conv), Leaky ReLU activation, and dropout operations, followed by representation learning via the Contrastive Transformer (CL-transformer) module. In this module, data augmentation generates multiple views of the input features, which are then processed by a graph convolutional network (GCN) and optimized using contrastive loss to learn robust single-modal representations. Subsequently, features from all three modalities are fed into a cross-attention module, where query, key, and value matrices are generated via linear projections. Attention weights are computed through matrix multiplication and scaled softmax, enabling effective inter-modal information interaction. Finally, outputs from each modality-specific classifier and the cross-attention module are integrated into the Low-Rank Multi-modal Fusion (LMF) block, which performs the ultimate multi-omics feature fusion to produce the final prediction.
-
-
-
-
+BOMIFA takes mRNA expression, miRNA expression, and DNA methylation data as input. Each modality is first processed by an Omics-Enhancement Encoder. A contrastive Transformer module then learns robust modality-specific representations from augmented views. Cross-attention is used to model interactions among omics modalities, and the resulting representations are integrated through low-rank multimodal fusion to generate the final prognostic prediction.
 
 
 ## Repository Structure
@@ -293,69 +290,6 @@ python main_bomifa.py \
   --data_folder ./preprocessed/MY_DATASET \
   --view_list mrna methylation mirna \
   --seed 42
-
-
-
-### main_bomifa.py
-main_bomifa.py runs on preprocessed data and uses one fold out of five (fold 1) for training/testing.
-To run the BOMIFA pipeline, you need to place your configuration code inside the main_bomifa.py file. This file acts as the user-facing script, calling the core model_prepare function to execute the complete training and evaluation workflow. 
-### main_bomifa.py
-model_prepare serves as the training entry function of the BOMIFA framework. It first loads the corresponding hyperparameters (adjacency matrix parameter and GCN hidden layer dimensions) according to the dataset name (e.g., UCEC), then creates the model saving directory, calls prepare_trte_data to read the multi‑omics data and the first‑fold cross‑validation indices, splits the training/testing features and labels, converts them into tensors, and generates one‑hot labels and sample weights. It then constructs graph adjacency matrices via gen_trte_adj_mat. Finally, it passes all data and hyperparameters to train_test, which sequentially executes GNN pre‑training, Transformer contrastive learning, cross‑attention training, final fusion, and end‑to‑end fine‑tuning, while outputting loss curves, classification metrics (accuracy, F1, AUC) and the survival C‑index, as well as saving the best model parameters.
-### train_test.py
-
-#### train_epoch_gnn
-This function performs one training epoch for the GNN pretraining stage. It iterates over each omics view, takes the corresponding data and adjacency matrix, computes the survival‑related Cox loss using the GNN encoder and a view‑specific classifier, backpropagates the loss, and updates the optimizer for that view. The function returns a list of losses for all views.
-
- 
-
-#### train_epoch_transform
-This function handles one training epoch for the contrastive Transformer stage. For each view, it obtains the output of the GNN encoder, passes it through a Transformer module (H), then through two separate predictors: a direct classifier (C) and a GCN‑based predictor (P) that uses the adjacency matrix and the label. The two losses are combined by a DynamicLossBalancer, and the combined loss is backpropagated through the view‑specific optimizer. The function returns the list of combined losses for each view.
-
-#### train_cross_attention
-This function trains the cross‑attention module (D) for one epoch. It first extracts features from each view using the GNN encoder, Transformer, and the predictor P to obtain projected features. These three projected feature sets are fed into the cross‑attention module, whose output is classified by a dedicated classifier (C3). The resulting Cox loss is backpropagated, gradients are clipped for stability, and the optimizer for the cross‑attention module (R) is updated. The function returns the loss value.
-
-#### train_epoch_final
-The train_epoch_final, it backpropagates the Cox loss through the dedicated optimizer A, which is configured with a lower learning rate (all_lr) to jointly fine‑tune all modules in the model. This stage corresponds to the final joint training phase, where the whole framework is refined together for optimal performance.#### test_epoch
-This function evaluates the model on a test set. It puts all sub‑models in evaluation mode, processes each view to obtain projected features, and then generates predictions either by fusing the three predictions (if there are at least two views) or by simply using the single‑view features. The output scores are converted to probabilities using the sigmoid function, and the raw scores (logits) are returned as a NumPy array for further metric calculation.
-
-
-
-### Loss Outputs
-oss_gnn_pretraining.png: Loss curve of the graph neural network (GNN) pretraining stage.
-loss_transformer_training.png: Loss curve of the single-modal Transformer training stage.
-loss_cross_attention.png: Loss curve of the cross-attention module during multi-modal fusion learning.
-loss_final_training.png: Final end-to-end training loss curve of the complete BOMIFA framework.
-
-
-
-### Evaluation Metrics
-
-#### calculate_classification_metrics
-All evaluation metrics are computed by the **`calculate_classification_metrics`** function in **`utils.py`**.
-
-This function automatically calculates the following performance scores for model evaluation:
-Accuracy: Proportion of correct predictions among all tested samples.
-F1-score: Harmonic mean of precision and recall, utilized to evaluate model performance on imbalanced datasets.
-AUC (Area Under Curve): Area under the ROC curve, measuring the overall binary classification discrimination ability of the model.
-C-index (Concordance Index): A key metric for assessing the predictive performance of survival prognosis models.
-
-
-
-### main_fine_marker.py (Marker Output)
-
-This code performs global saliency analysis on three types of multi-omics data (mRNA, miRNA, and DNA methylation). It iterates through each modality, dynamically loads a pre-trained combined model (comprising GCN_E, Transformer, GCN_comp, and a classifier) based on the input feature dimensions, and then uses a TrainedModelSaliencyAnalyzer to compute feature importance scores with respect to a given prediction label (pred_label). The top 500 most important features are selected. The corresponding feature names are read from {a}_featname.csv files, and both the names and importance scores are saved as CSV files (0_features.csv, 1_features.csv, 2_features.csv) in the ./{data_folder}/marker/ directory. The indices, names, and scores are also printed, ultimately helping to identify key biomarkers.
-
-#### load_trained_model function
-This function loads pre‑trained weights for each of the four sub‑models from saved .pth files, given a specific modality index i, training epoch num, and data folder path. It instantiates GCN_E, the Transformer fusion model (all), GCN_comp, and Classifier with the provided dimensions and hyperparameters, then loads the corresponding checkpoint files (e.g., E{i}.pth, H{i}.pth, P{i}.pth, C{i}.pth). After setting all sub‑models to evaluation mode, it wraps them inside a CombinedModel instance and returns the ready‑to‑use composite model.
-
-
-#### run_saliency function
-This function performs global saliency analysis on three omics modalities (mRNA, miRNA, methylation) to identify the top 500 features that most influence a given prediction label. It loops over each modality, loads the corresponding trained CombinedModel by calling load_trained_model, and uses a TrainedModelSaliencyAnalyzer to compute feature importance scores from the input features and adjacency matrix. 
-
-
-
-
-
 
 
 
