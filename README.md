@@ -302,8 +302,6 @@ python processing.py \
 python main_bomifa.py \
   --dataset MY_DATASET \
   --data_folder ./preprocessed/MY_DATASET \
-  --view_list mrna methylation mirna \
-  --seed 42
 ```
 
 
