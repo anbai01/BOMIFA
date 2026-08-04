@@ -77,20 +77,8 @@ pip install -r requirements.txt
 ```
 #### 4. Run the example
 ```bash
-python processing.py \
-  --data_folder ./test_data \
-  --train_labels fold1_train_labels.csv \
-  --test_labels fold1_test_labels.csv \
-  --output_folder ./preprocessed_test \
-  --top_k 100
-
-
-
 python main_bomifa.py \
-  --data_folder ./test_data \
-  --output_folder ./preprocessed_test \
-  --top_num 100 
-
+  --data_folder ./UCEC 
 ```
 ## Requirements
 - Python 3.9+  We do not recommend using Python versions higher than 3.11, as they often lead to dependency conflicts between deep learning frameworks including TensorFlow, PyTorch, and DGL.##
@@ -105,8 +93,11 @@ lifelines ==0.29.0
 - Other dependencies listed in `requirements.txt`
 
 ## Recommended reproducible installation
+ ```bash
+
 conda env create -f environment.yml
 conda activate bomifa
+ ```
 
 ## Repository Structure
 ### Input Data Specifications
@@ -128,26 +119,42 @@ hsa-let-7a-2	12.62163327	12.33025323	13.82986345	12.34579788
 hsa-let-7a-3	12.62603131	12.33025323	13.86777909	12.37162985
 
 ```
+Recommended survial data format**Example (surv_time.csv)**：
 
+ ```bash
+cases.submitter_id	follow_ups.days_to_follow_up
+TCGA-AJ-A3NH	1
+TCGA-SL-A6J9	2
+TCGA-AJ-A8CW	4
+TCGA-AX-A3GI	4
+TCGA-BG-A3EW	5
+TCGA-AX-A3FZ	6
+
+
+```
 ## Minimal Runnable Example
 This minimal example allows users to verify the installation and complete the full workflow without downloading the complete UCEC dataset.
 
 
 ### Use preprocessed data (recommended)
 #### Due to the large size of the raw data, we provide ready‑to‑use preprocessed multi‑omics files in the PREPROCESSED/ directory (you can place this folder in the project root). The files are:
- ```bash
-
-PREPROCESSED/
-├── X_train_mrna.csv
-├── X_train_methyl.csv
-├── X_train_mirna.csv
-├── X_test_mrna.csv
-├── X_test_methyl.csv
-└── X_test_mirna.csv
-```
+ 
 ### Run the model：
  ```bash
-python main_bomifa.py
+```bash
+python processing.py \
+  --data_folder ./test_data \
+  --train_labels fold1_train_labels.csv \
+  --test_labels fold1_test_labels.csv \
+  --output_folder ./preprocessed_test \
+  --top_k 100
+
+
+
+python main_bomifa.py \
+  --data_folder ./test_data \
+  --output_folder ./preprocessed_test \
+  --top_num 100 
 
 ```
 ### main_bomifa.py accepts the following command‑line arguments. To see the full help, run:
