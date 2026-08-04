@@ -277,7 +277,8 @@ python main_bomifa.py
 
 
 ## Applying BOMIFA to a New Dataset
-Step 1. Prepare the input files
+### Step 1. Prepare the input files
+```bash
 Create a new dataset directory:
 data/MY_DATASET/
 ├── mrna.csv
@@ -289,17 +290,21 @@ data/MY_DATASET/
 ├── 0_featname.csv
 ├── 1_featname.csv
 └── 2_featname.csv
-Step 2. Run preprocessing
+```
+### Step 2. Run preprocessing
+```bash
 python processing.py \
   --data_folder ./data/MY_DATASET \
   --output_folder ./preprocessed/MY_DATASET
-Step 3. Train and evaluate the model
+```
+### Step 3. Train and evaluate the model
+```bash
 python main_bomifa.py \
   --dataset MY_DATASET \
   --data_folder ./preprocessed/MY_DATASET \
   --view_list mrna methylation mirna \
   --seed 42
-
+```
 
 
 ## GPU/CPU Support
