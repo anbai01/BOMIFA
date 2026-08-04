@@ -140,7 +140,6 @@ This minimal example allows users to verify the installation and complete the fu
 #### Due to the large size of the raw data, we provide ready‑to‑use preprocessed multi‑omics files in the PREPROCESSED/ directory (you can place this folder in the project root). The files are:
  
 ### Run the model：
- ```bash
 ```bash
 python processing.py \
   --data_folder ./test_data \
@@ -175,10 +174,10 @@ During model training, test set metrics are printed at each epoch, including F1 
 Example console output:
  ```bash
 Test: Epoch 
-Test F1: 
-Test ACC1:
-Test AUC:
-Test C-INDEX:
+Test F1: 0.904
+Test ACC1: 0.826
+Test AUC: 0.688
+Test C-INDEX:0.61
  ```
 #### After training, the script automatically invokes Saliency.py to perform saliency analysis and extract top‑ranked biomarkers. The results (feature names and importance scores) are saved in the UCEC/marker/.
 
