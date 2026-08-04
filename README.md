@@ -21,16 +21,17 @@ BOMIFA/
 ├── requirements.txt                  # List of dependencies
 │
 ├── UCEC/                             # Example dataset (Uterine Corpus Endometrial Carcinoma)
+│   ├── mrna.csv                 # mRNA expression matrix (genes × samples)
+│   ├── methylation.csv          # DNA methylation matrix (probes × samples)
+│   ├── micrna.csv               # miRNA expression matrix (miRNAs × samples)
 │   ├── fold1_test_labels.csv         # Test set labels for fold 1
 │   ├── fold1_train_labels.csv        # Training set labels for fold 1
-│   ├── 0_featname.csv           # Full feature names for mRNA (used for saliency mapping)
-│   ├── 1_featname.csv           # Full feature names for methylation
-│   ├── 2_featname.csv           # Full feature names for miRNA
-│   ├── fold1_train_labels.csv   # Training set labels for fold 1
-│   ├── fold1_test_labels.csv    # Test set labels for fold 1
 │   └── surv_time.csv                 # Survival time and event information
 │
 ├── preprocessed/                     # Preprocessed multi-omics feature data
+│   ├── 0_featname.csv           # Full feature names for mRNA (used for saliency mapping)
+│   ├── 1_featname.csv           # Full feature names for methylation
+│   ├── 2_featname.csv           # Full feature names for miRNA
 │   ├── X_test_methyl.csv             # Test set: DNA methylation
 │   ├── X_test_mirna.csv              # Test set: miRNA expression
 │   ├── X_test_mrna.csv               # Test set: mRNA expression
@@ -83,9 +84,11 @@ python processing.py \
   --output_folder ./preprocessed_test \
   --top_k 100
 
+
+
 python main_bomifa.py \
   --data_folder ./test_data \
-  --output_folder ./preprocessed \
+  --output_folder ./preprocessed_test \
   --top_num 100 
 
 ```
@@ -115,9 +118,6 @@ UCEC/
 ├── micrna.csv               # miRNA expression matrix (miRNAs × samples)
 ├── fold1_train_labels.csv   # Training set labels for fold 1
 ├── fold1_test_labels.csv    # Test set labels for fold 1
-├── 0_featname.csv           # Full feature names for mRNA (used for saliency mapping)
-├── 1_featname.csv           # Full feature names for methylation
-├── 2_featname.csv           # Full feature names for miRNA
 └──surv_time.csv  
 ```
 Recommended omic-data format**Example (miRNA expression matrix)**：
@@ -178,12 +178,18 @@ Test C-INDEX:
 
 
 
-### Marker Genes Output
+### Output
 Final filtered marker gene lists are saved under the directory:
-`./UCEC/marker/`
-0_features.csv – important markers identified from mRNA expression data
-1_features.csv – important markers identified from DNA methylation data
-2_features.csv – important markers identified from miRNA expression data
+`./UCEC`
+0_features.csv                   # important markers identified from mRNA expression data
+1_features.csv                   # important markers identified from DNA methylation data
+2_features.csv                   # important markers identified from miRNA expression data
+loss_gnn_pretraining.png         # Loss curve for GNN pretraining stage
+loss_transformer_training.png    # Loss curve for Transformer contrastive learning stage
+loss_cross_attention.png         # Loss curve for cross-attention fusion stage
+loss_final_training.png          # Loss curve for end-to-end joint fine-tuning stage
+models                           # Saved best model weights (organized by fold)
+best_results.csv                 # Best validation metrics from training (accuracy, f1, auc, c-index)
 ### Example content of 0_features.csv (mRNA, top 10 features shown, ranked by importance)
 ```bash
 feature_name	importance
