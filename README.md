@@ -58,18 +58,27 @@ BOMIFA/
 
 # Quick Start
 The following workflow uses the preprocessed UCEC example data included in this repository.
-## 1. Clone the repository
+#### 1. Clone the repository
+```bash
 git clone https://github.com/anbai01/BOMIFA.git
 cd BOMIFA
-## 2. Create the environment
+```
+
+#### 2. Create the environment
+```bash
 conda create -n bomifa python=3.9
 conda activate bomifa
-## 3. Install dependencies
+```
+#### 3. Install dependencies
+
+```bash
 pip install -r requirements.txt
-## 4. Run the example
+```
+#### 4. Run the example
+```bash
 python main_bomifa.py \
   --data_folder ./UCEC \
-
+```
 ## Requirements
 - Python 3.9+  We do not recommend using Python versions higher than 3.11, as they often lead to dependency conflicts between deep learning frameworks including TensorFlow, PyTorch, and DGL.##
 ## Main dependencies
