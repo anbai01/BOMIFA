@@ -1,342 +1,143 @@
-from torch.optim.lr_scheduler import StepLR, ReduceLROnPlateau
-from utils import DynamicLossBalancer as DB, DynamicLossBalancer
-import pandas as pd
 import numpy as np
+import pandas as pd
 import torch
-import torch.nn.functional as F
-from models import init_model_dict, init_optim
-from cox_loss import loss as surv_loss
-cuda = True if torch.cuda.is_available() else False
-import matplotlib.pyplot as plt
-from utils import calculate_classification_metrics as metrics
 import os
-os.environ['CUDA_LAUNCH_BLOCKING'] = '1'
 
-CUDA_AVAILABLE = torch.cuda.is_available()
+from main_fine_marker import run_saliency
+from utils import (
+    one_hot_tensor,
+    cal_sample_weight,
+    gen_trte_adj_mat,
+)
+from train_test import train_test
 
-def train_epoch_gnn(data_list, adj_list, label, model_dict, optim_dict):
-    """Train GNN epoch"""
-    for model in model_dict.values():
-        model.train()
+def model_prepare(
+        data_folder, view_list, num_class, lr_e_gcn, lr_e_cl_transformer, nhead, d_ff,
+        num_layers, cross_num_heads, d_model, rank, lr_cross_attention, lr_c,
+        all_lr, num_epoch_pretrain, transformer_epochs,top_num,
+        output_folder="./preprocessed"):   
 
-    num_view = len(data_list)
-    losses = []
-    for i in range(num_view):
-        optim_dict[f"C{i + 1}"].zero_grad()
-        features = model_dict[f"E{i + 1}"](data_list[i], adj_list[i])
-        predictions = model_dict[f"C{i + 1}"](features)
-        ci_loss = surv_loss(predictions, label)
+    dataset_config = {
+        'OV': {'adj_parameter': 2, 'dim_he_list': [300, 300, 200]},
+        'CESC': {'adj_parameter': 2, 'dim_he_list': [400, 400, 300]},
+        'UCEC': {'adj_parameter': 2, 'dim_he_list': [400, 400, 300]},
+        'LGG': {'adj_parameter': 2, 'dim_he_list': [400, 400, 200]},
+        'STAD': {'adj_parameter': 2, 'dim_he_list': [400, 400, 300]},
+        'HNSC': {'adj_parameter': 2, 'dim_he_list': [400, 400, 200]},
+        'BRCA': {'adj_parameter': 2, 'dim_he_list': [400, 400, 300]},
+        'LUAD': {'adj_parameter': 2, 'dim_he_list': [300, 300, 200]}
+    }
+    default_config = {'adj_parameter': 2, 'dim_he_list': [100, 100, 50]}
+    config = dataset_config.get(data_folder, default_config)
+    if data_folder not in dataset_config:
+        print(f"Warning: Dataset '{data_folder}' not found in config, using default: {default_config}")
+    adj_parameter = config['adj_parameter']
+    dim_he_list = config['dim_he_list']
 
-        ci_loss.backward()
-        optim_dict[f"C{i + 1}"].step()
-        losses.append(ci_loss)
-    return losses
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    data_path = os.path.join(script_dir, data_folder)
+    model_folder = os.path.join(output_folder, "models")
+    os.makedirs(model_folder, exist_ok=True)
 
-def train_epoch_transform(data_list, adj_list, label, model_dict, optim_dict, loss_balancer):
-    """Train Transformer epoch"""
-    for model in model_dict.values():
-        model.train()
+    X_train_mrna = pd.read_csv(os.path.join(output_folder, "X_train_mrna.csv"), index_col=0)
+    X_test_mrna = pd.read_csv(os.path.join(output_folder, "X_test_mrna.csv"), index_col=0)
+    X_train_methyl = pd.read_csv(os.path.join(output_folder, "X_train_methyl.csv"), index_col=0)
+    X_test_methyl = pd.read_csv(os.path.join(output_folder, "X_test_methyl.csv"), index_col=0)
+    X_train_mirna = pd.read_csv(os.path.join(output_folder, "X_train_mirna.csv"), index_col=0)
+    X_test_mirna = pd.read_csv(os.path.join(output_folder, "X_test_mirna.csv"), index_col=0)
 
-    num_view = len(data_list)
-    losses = []
-    for i in range(num_view):
-        optim_dict[f"V{i + 1}"].zero_grad()
-        x_out, adj_out = model_dict[f"E{i + 1}"](data_list[i], adj_list[i], True)
-        features = model_dict[f"H{i + 1}"](x_out)
-        pred1 = model_dict[f"C{i + 1}"](features)
-        pred2 = model_dict[f"P{i + 1}"](features, adj_out, label, True)
+    train_label_path = os.path.join(data_folder, "fold1_train_labels.csv")
+    test_label_path = os.path.join(data_folder, "fold1_test_labels.csv")
+    train_labels = pd.read_csv(train_label_path)
+    test_labels = pd.read_csv(test_label_path)
 
-        loss1 = surv_loss(pred1, label)
-        combined_loss, weights = loss_balancer([loss1, pred2])
-        print(f"Loss weights: {weights}")
+    y_train = train_labels['label'].values
+    y_test = test_labels['label'].values
+    common_train = train_labels['sample_id'].tolist()
+    common_test = test_labels['sample_id'].tolist()
 
-        combined_loss.backward()
-        optim_dict[f"V{i + 1}"].step()
-        losses.append(combined_loss)
-    return losses
+    actual_num_class = len(np.unique(y_train))
+    if num_class != actual_num_class:
+        print(f"警告：传入的 num_class={num_class} 与数据实际类别数 {actual_num_class} 不符，将使用 {actual_num_class}")
+        num_class = actual_num_class
 
-def train_cross_attention(data_list, adj_list, label, model_dict, optim_dict):
-    """Train cross attention"""
-    for model in model_dict.values():
-        model.train()
+    def to_tensor(df):
+        return torch.FloatTensor(df.T.values)  
 
-    num_view = len(data_list)
-    optim_dict["R"].zero_grad()
-
-    feature_list = []
-    for j in range(num_view):
-        features, adj = model_dict[f"E{j + 1}"](data_list[j], adj_list[j], True)
-        processed_features = model_dict[f"H{j + 1}"](features)
-        projected_features = model_dict[f"P{j + 1}"](processed_features, adj)
-        feature_list.append(projected_features)
-
-    cross_features = model_dict["D"](feature_list[0], feature_list[1], feature_list[2])
-    predictions = model_dict["C3"](cross_features)
-    loss = surv_loss(predictions, label)
-
-    loss.backward()
-    torch.nn.utils.clip_grad_value_(model_dict["D"].parameters(), clip_value=5.0)
-    optim_dict["R"].step()
-
-    return loss
-
-
-def train_epoch_final(data_list, adj_list, label, one_hot_label, sample_weight, model_dict, optim_dict):
-    """Final training epoch"""
-    for model in model_dict.values():
-        model.train()
-
-    num_view = len(data_list)
-    optim_dict["C"].zero_grad()
-
-    feature_list = []
-    for j in range(num_view):
-        features, adj = model_dict[f"E{j + 1}"](data_list[j], adj_list[j], True)
-        processed_features = model_dict[f"H{j + 1}"](features)
-        projected_features = model_dict[f"P{j + 1}"](processed_features, adj)
-        feature_list.append(projected_features)
-
-    predictions_list = [
-        model_dict["C1"](feature_list[0]),
-        model_dict["C2"](feature_list[1]),
-        model_dict["C3"](model_dict["D"](feature_list[0], feature_list[1], feature_list[2]))
+    data_train = [
+        to_tensor(X_train_mrna),
+        to_tensor(X_train_methyl),
+        to_tensor(X_train_mirna)
     ]
 
-    final_predictions = model_dict["C"](predictions_list)
-    loss = surv_loss(final_predictions, label)
+    X_all_mrna = pd.concat([X_train_mrna, X_test_mrna], axis=1)
+    X_all_methyl = pd.concat([X_train_methyl, X_test_methyl], axis=1)
+    X_all_mirna = pd.concat([X_train_mirna, X_test_mirna], axis=1)
 
-    loss.backward()
-    torch.nn.utils.clip_grad_value_(model_dict["C"].parameters(), clip_value=3.0)
-    optim_dict["C"].step()
-
-    return loss
-
-def train_epoch_all(data_list, adj_list, label, one_hot_label, sample_weight, model_dict, optim_dict):
-    """Full training epoch"""
-    for model in model_dict.values():
-        model.train()
-
-    num_view = len(data_list)
-    optim_dict["A"].zero_grad()
-
-    feature_list = []
-    for j in range(num_view):
-        features, adj = model_dict[f"E{j + 1}"](data_list[j], adj_list[j], True)
-        processed_features = model_dict[f"H{j + 1}"](features)
-        projected_features = model_dict[f"P{j + 1}"](processed_features, adj)
-        feature_list.append(projected_features)
-
-    predictions_list = [
-        model_dict["C1"](feature_list[0]),
-        model_dict["C2"](feature_list[1]),
-        model_dict["C3"](model_dict["D"](feature_list[0], feature_list[1], feature_list[2]))
+    data_all = [
+        to_tensor(X_all_mrna),
+        to_tensor(X_all_methyl),
+        to_tensor(X_all_mirna)
     ]
 
-    final_predictions = model_dict["C"](predictions_list)
-    loss = surv_loss(final_predictions, label)
+    labels = np.concatenate([y_train, y_test]).astype(int)
+    n_train = len(y_train)
+    n_test = len(y_test)
+    trte_idx = {"tr": list(range(n_train)), "te": list(range(n_train, n_train + n_test))}
 
-    loss.backward()
-    torch.nn.utils.clip_grad_value_(model_dict["C"].parameters(), clip_value=3.0)
-    optim_dict["A"].step()
+    labels_tr_tensor = torch.LongTensor(labels[trte_idx["tr"]])
+    onehot_labels_tr_tensor = one_hot_tensor(labels_tr_tensor, num_class)
+    sample_weight_tr = cal_sample_weight(y_train, num_class)
+    sample_weight_tr = torch.FloatTensor(sample_weight_tr)
 
-    return loss
+    dim_list = [x.shape[1] for x in data_train]
 
-def test_epoch(test_label, data_list, adj_list, test_indices, model_dict, threshold=None):
-    """Test epoch"""
-    for model in model_dict.values():
-        model.eval()
+    if torch.cuda.is_available():
+        data_train = [t.cuda() for t in data_train]
+        data_all = [t.cuda() for t in data_all]
+        labels_tr_tensor = labels_tr_tensor.cuda()
+        onehot_labels_tr_tensor = onehot_labels_tr_tensor.cuda()
+        sample_weight_tr = sample_weight_tr.cuda()
 
-    num_view = len(data_list)
-    feature_list = []
+    adj_tr_list, adj_te_list = gen_trte_adj_mat(data_train, data_all, trte_idx, adj_parameter)
 
-    for j in range(num_view):
-        features, adj = model_dict[f"E{j + 1}"](data_list[j], adj_list[j], True)
-        processed_features = model_dict[f"H{j + 1}"](features)
-        projected_features = model_dict[f"P{j + 1}"](processed_features, adj)
-        feature_list.append(projected_features)
+    iteration_folder = os.path.join(model_folder, "0")
+    os.makedirs(iteration_folder, exist_ok=True)
 
-    if num_view >= 2:
-        predictions_list = [
-            model_dict["C1"](feature_list[0]),
-            model_dict["C2"](feature_list[1]),
-            model_dict["C3"](model_dict["D"](feature_list[0], feature_list[1], feature_list[2]))
-        ]
-        predictions = model_dict["C"](predictions_list)
-    else:
-        predictions = feature_list[0]
-
-    test_predictions = predictions[test_indices, :]
-    scores = test_predictions.data.cpu().numpy()
-    probabilities = F.sigmoid(test_predictions).data.cpu().numpy()
-    return scores
-
-def train_test(view_list, num_class, dim_he_list,
-               lr_e_gcn, lr_e_cl_transformer, nhead, d_ff, num_layers,
-               cross_num_heads, d_model, rank, lr_cross_attention, lr_c,
-               all_lr, num_epoch_pretrain, transformer_epochs, adj_tr_list, adj_te_list,
-               dim_list, onehot_labels_tr_tensor, labels_tr_tensor,
-               sample_weight_tr, fold_data_train, fold_data_trte, labels_trte,
-               trte_idx, iteration_folder,common_train,common_test,
-               data_folder):
-    """Main train test function"""
-
-    num_view = len(view_list)
-    model_dict = init_model_dict(
-        num_view, dim_list, dim_he_list, nhead, d_ff, num_layers,
-        cross_num_heads, d_model, rank
+    pred = train_test(
+        view_list=view_list,
+        num_class=num_class,
+        dim_he_list=dim_he_list,
+        lr_e_gcn=lr_e_gcn,
+        lr_e_cl_transformer=lr_e_cl_transformer,
+        nhead=nhead,
+        d_ff=d_ff,
+        num_layers=num_layers,
+        cross_num_heads=cross_num_heads,
+        d_model=d_model,
+        rank=rank,
+        lr_cross_attention=lr_cross_attention,
+        lr_c=lr_c,
+        all_lr=all_lr,
+        num_epoch_pretrain=num_epoch_pretrain,
+        transformer_epochs=transformer_epochs,
+        adj_tr_list=adj_tr_list,
+        adj_te_list=adj_te_list,
+        dim_list=dim_list,
+        onehot_labels_tr_tensor=onehot_labels_tr_tensor,
+        labels_tr_tensor=labels_tr_tensor,
+        sample_weight_tr=sample_weight_tr,
+        fold_data_train=data_train,
+        fold_data_trte=data_all,
+        labels_trte=labels,
+        trte_idx=trte_idx,
+        iteration_folder=iteration_folder,
+        common_train=common_train,
+        common_test=common_test,
+        data_folder=data_folder
     )
 
-    if CUDA_AVAILABLE:
-        for model in model_dict.values():
-            model.cuda()
+    num = 0
+    run_saliency(data_train, adj_tr_list, dim_he_list, num, pred, top_num,output_folder)
 
-    print("\nPretraining GCNs...")
-
-    # Training history
-    gnn_loss_history = [[] for _ in range(num_view)]
-    transformer_loss_history = [[] for _ in range(num_view)]
-    cross_loss_history = []
-    final_loss_history = []
-
-    best_accuracy = 0.0
-
-    optim_dict = init_optim(num_view, model_dict, lr_e_gcn, lr_e_cl_transformer,lr_cross_attention,lr_c, all_lr)
-    schedulers = {
-        key: StepLR(optimizer, step_size=100, gamma=0.99)
-        for key, optimizer in optim_dict.items()
-    }
-
-    for epoch in range(num_epoch_pretrain):
-        losses = train_epoch_gnn(fold_data_train, adj_tr_list, labels_tr_tensor, model_dict, optim_dict)
-
-        for i, loss in enumerate(losses):
-            gnn_loss_history[i].append(loss.item())
-
-        for scheduler in schedulers.values():
-            scheduler.step()
-
-    plt.figure()
-    plt.title('GNN Pretraining Loss')
-    plt.xlabel('Epoch')
-    plt.ylabel('Loss')
-    plt.grid(True)
-    for i in range(num_view):
-        plt.plot(range(num_epoch_pretrain), gnn_loss_history[i], marker='o', label=f'View {i + 1}')
-    plt.legend()
-    plt.savefig('./loss_gnn_pretraining.png')
-    plt.close()
-
-    print("\nTraining Transformers...")
-
-    df_path = os.path.join(data_folder, "surv_time.csv")   # Construct path from data_folder
-    df_surv = pd.read_csv(df_path)
-
-    df_surv.columns = ['PatientID', 'Survival']  # Rename by column order
-    print(df_surv)
-    # Prepare sample ID lists (common_train, common_test)
-    # Merge survival information directly
-    train_surv = pd.DataFrame({'PatientID': common_train}).merge(df_surv, on='PatientID', how='left')
-    test_surv = pd.DataFrame({'PatientID': common_test}).merge(df_surv, on='PatientID', how='left')
-    test_times = test_surv['Survival'].values
-    train_times = train_surv['Survival'].values
-
-    print(test_times)
-    optim_dict = init_optim(num_view, model_dict, lr_e_gcn, lr_e_cl_transformer, lr_cross_attention, lr_c)
-    schedulers = {
-        key: StepLR(optimizer, step_size=100, gamma=0.99)
-        for key, optimizer in optim_dict.items()
-    }
-
-    loss_balancer = DynamicLossBalancer(num_losses=2, init_weights=[0.7, 0.3])
-
-    for epoch in range(transformer_epochs + 1):
-        print(f"Epoch: {epoch}")
-        losses = train_epoch_transform(fold_data_train, adj_tr_list, labels_tr_tensor, model_dict, optim_dict,
-                                       loss_balancer)
-
-        for scheduler in schedulers.values():
-            scheduler.step()
-
-        for i, loss in enumerate(losses):
-            transformer_loss_history[i].append(loss.item())
-
-    plt.figure()
-    plt.title('Transformer Training Loss')
-    plt.xlabel('Epoch')
-    plt.ylabel('Loss')
-    plt.grid(True)
-    for i in range(num_view):
-        plt.plot(range(transformer_epochs + 1), transformer_loss_history[i], marker='o', label=f'View {i + 1}')
-    plt.legend()
-    plt.savefig('./loss_transformer_training.png')
-    plt.close()
-
-    print("\nTraining Cross Attention...")
-
-    cross_attention_epochs = 300
-    for epoch in range(cross_attention_epochs + 1):
-        print(f"Epoch: {epoch}")
-        loss = train_cross_attention(fold_data_train, adj_tr_list, labels_tr_tensor, model_dict, optim_dict)
-        cross_loss_history.append(loss.item())
-
-        # for scheduler in schedulers.values():
-        #     scheduler.step(loss.item())
-
-    plt.figure()
-    plt.plot(range(cross_attention_epochs + 1), cross_loss_history, marker='o')
-    plt.title('Cross Attention Training Loss')
-    plt.xlabel('Epoch')
-    plt.ylabel('Loss')
-    plt.grid(True)
-    plt.savefig('./loss_cross_attention.png')
-    plt.close()
-
-    print("\nFinal Training...")
-
-    # Stage 4: Final training
-    final_epochs = 200
-    for epoch in range(final_epochs + 1):
-        loss1 = train_epoch_final(fold_data_train, adj_tr_list, labels_tr_tensor,
-                                  onehot_labels_tr_tensor, sample_weight_tr, model_dict, optim_dict)
-        train_epoch_all(fold_data_train, adj_tr_list, labels_tr_tensor,
-                        onehot_labels_tr_tensor, sample_weight_tr, model_dict, optim_dict)
-
-        final_loss_history.append(loss1.item())
-
-        if epoch % 1 == 0:
-            scores = test_epoch(
-                labels_trte[trte_idx["te"]], fold_data_trte, adj_te_list, trte_idx["te"], model_dict, None
-            )
-            print(f"\nTest: Epoch {epoch}")
-            if num_class == 2:
-                accuracy, f1, auc_score, c_index,pred_labels = metrics(labels_trte[trte_idx["te"]], scores, test_times)
-
-                if accuracy > best_accuracy:
-                    best_accuracy = accuracy
-                    df_results = pd.DataFrame([{
-                        'accuracy': best_accuracy,
-                        'f1': f1,
-                        'auc': auc_score,
-                        'c_index': c_index
-                    }])
-                    df_results.to_csv('best_results.csv', index=False)
-
-                    # Save models
-                    for model_key, model in model_dict.items():
-                        if CUDA_AVAILABLE:
-                            state_dict = {k: v.cpu() for k, v in model.state_dict().items()}
-                        else:
-                            state_dict = model.state_dict()
-                        torch.save(state_dict, f'{iteration_folder}/{model_key}.pth')
-                        # print(f'Saved {model_key} model parameters')
-
-    # Plot final loss
-    plt.figure()
-    plt.title('Final Training Loss')
-    plt.xlabel('Epoch')
-    plt.ylabel('Loss')
-    plt.grid(True)
-    plt.plot(range(final_epochs + 1), final_loss_history, marker='o')
-    plt.savefig('./loss_final_training.png')
-    plt.close()
-    return pred_labels
+    print(f"Training completed. Models saved to {model_folder}")

@@ -120,7 +120,6 @@ def gen_adj_mat_tensor(data, parameter, metric="cosine"):
     if cuda:
         I = I.cuda()
     adj = adj + adj_T*(adj_T > adj).float() - adj*(adj_T > adj).float()
-    # device = adj.device  # 获取 adj 的设备
     # I = torch.eye(adj.size(0), device=device)
     adj = F.normalize(adj + I, p=1)
     adj = to_sparse(adj)
@@ -181,7 +180,6 @@ class DynamicLossBalancer(nn.Module):
     def __init__(self, num_losses, init_weights=None, momentum=0.9, lr=0.01):
 
         super().__init__()
-        # 将权重注册为可学习参数
         self.log_weights = nn.Parameter(
             torch.log(torch.ones(num_losses)) if init_weights is None
             else torch.log(torch.tensor(init_weights, dtype=torch.float)))
@@ -193,7 +191,6 @@ class DynamicLossBalancer(nn.Module):
         self.register_buffer('first_pass', torch.ones(1, dtype=torch.bool))
 
     def get_weights(self):
-        """获取归一化权重"""
         return F.softmax(self.log_weights, dim=0)
 
     def forward(self, losses):

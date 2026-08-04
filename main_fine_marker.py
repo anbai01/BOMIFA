@@ -50,7 +50,7 @@ def load_trained_model(in_dim, hgcn_dim, i, num, data_folder, dropout=0.4):
     return combined_model
 
 
-def run_saliency(h, adj_T, dim_he_list, num, pred_label, data_folder='preprocessed', dropout=0.1):
+def run_saliency(h, adj_T, dim_he_list, num, pred_label,top_k, data_folder='preprocessed', dropout=0.1):
     for i in range(3):
         x = h[i]
         adj = adj_T[i]
@@ -60,8 +60,8 @@ def run_saliency(h, adj_T, dim_he_list, num, pred_label, data_folder='preprocess
 
         trained_model = load_trained_model(in_dim, dim_he_list, a, num, data_folder, dropout)
         saliency_analyzer = TrainedModelSaliencyAnalyzer(trained_model)
-        global_importance = saliency_analyzer.analyze_global_importance(x, adj, pred_label, top_k=500)
-        path1 = f'./{data_folder}/{a}_featname.csv'
+        global_importance = saliency_analyzer.analyze_global_importance(x, adj, pred_label, top_k=top_k)
+        path1 = f'{data_folder}/{a}_featname.csv'
         df = pd.read_csv(path1, header=None)
         featname_list = []
         featname_list.append(df.values.flatten())

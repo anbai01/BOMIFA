@@ -21,6 +21,7 @@ if __name__ == "__main__":
     parser.add_argument("--num_classes", type=int, default=2)
     parser.add_argument("--output_folder", type=str, default="./preprocessed",
                         help="Folder containing preprocessed CSV files (X_train_*.csv, X_test_*.csv)")
+    parser.add_argument("--top_num", type=int, default=100)
 
     args = parser.parse_args()
 
@@ -41,5 +42,6 @@ if __name__ == "__main__":
         all_lr=args.all_lr,
         num_epoch_pretrain=args.num_epoch_pretrain,
         transformer_epochs=args.transformer_epochs,
+        top_num=args.top_num,
         output_folder=args.output_folder
     )

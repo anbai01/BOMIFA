@@ -48,7 +48,7 @@ class TrainedModelSaliencyAnalyzer:
             'predicted_class': pred_class,
             'prediction_confidence': pred_prob,
             'feature_importance': node_feature_importance,
-            'top_features': np.argsort(node_feature_importance)[::-1]  
+            'top_features': np.argsort(node_feature_importance)[::-1]
         }
 
     def analyze_global_importance(self, x, adj, true_label,top_k=10):

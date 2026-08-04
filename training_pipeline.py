@@ -14,7 +14,7 @@ from train_test import train_test
 def model_prepare(
         data_folder, view_list, num_class, lr_e_gcn, lr_e_cl_transformer, nhead, d_ff,
         num_layers, cross_num_heads, d_model, rank, lr_cross_attention, lr_c,
-        all_lr, num_epoch_pretrain, transformer_epochs,
+        all_lr, num_epoch_pretrain, transformer_epochs,top_num,
         output_folder="./preprocessed"):
     dataset_config = {
         'OV': {'adj_parameter': 2, 'dim_he_list': [300, 300, 200]},
@@ -138,6 +138,6 @@ def model_prepare(
     )
 
     num = 0
-    run_saliency(data_train, adj_tr_list, dim_he_list, num, pred, output_folder)
+    run_saliency(data_train, adj_tr_list, dim_he_list, num, pred,top_num, output_folder)
 
     print(f"Training completed. Models saved to {model_folder}")
