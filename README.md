@@ -76,8 +76,18 @@ pip install -r requirements.txt
 ```
 #### 4. Run the example
 ```bash
+python processing.py \
+  --data_folder ./test_data \
+  --train_labels fold1_train_labels.csv \
+  --test_labels fold1_test_labels.csv \
+  --output_folder ./preprocessed_test \
+  --top_k 100
+
 python main_bomifa.py \
-  --data_folder ./UCEC \
+  --data_folder ./test_data \
+  --output_folder ./preprocessed \
+  --top_num 100 
+
 ```
 ## Requirements
 - Python 3.9+  We do not recommend using Python versions higher than 3.11, as they often lead to dependency conflicts between deep learning frameworks including TensorFlow, PyTorch, and DGL.##
