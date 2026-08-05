@@ -159,15 +159,11 @@ python main_bomifa.py \
 ### main_bomifa.py accepts the following command‑line arguments. To see the full help, run:
  ```bash
  python main_bomifa.py -h
-usage: main_bomifa.py [-h] [--data_folder DATA_FOLDER]
-                      [--view_list VIEW_LIST [VIEW_LIST ...]]
-                      [--num_epoch_pretrain NUM_EPOCH_PRETRAIN]
-                      [--transformer_epochs TRANSFORMER_EPOCHS] [--lr_e_gcn LR_E_GCN]   
-                      [--lr_e_cl_transformer LR_E_CL_TRANSFORMER] [--n_head N_HEAD]     
-                      [--d_ff D_FF] [--num_layers NUM_LAYERS]
-                      [--cross_num_heads CROSS_NUM_HEADS] [--d_model D_MODEL]
-                      [--rank RANK] [--lr_cross_attention LR_CROSS_ATTENTION]
-                      [--lr_c LR_C] [--all_lr ALL_LR] [--num_classes NUM_CLASSES]    
+usage: main_bomifa.py [-h] [--data_folder DATA_FOLDER] [--view_list VIEW_LIST [VIEW_LIST ...]] [--num_epoch_pretrain NUM_EPOCH_PRETRAIN]
+                      [--transformer_epochs TRANSFORMER_EPOCHS] [--lr_e_gcn LR_E_GCN] [--lr_e_cl_transformer LR_E_CL_TRANSFORMER] [--n_head N_HEAD] [--d_ff D_FF]
+                      [--num_layers NUM_LAYERS] [--cross_num_heads CROSS_NUM_HEADS] [--d_model D_MODEL] [--rank RANK] [--lr_cross_attention LR_CROSS_ATTENTION] [--lr_c LR_C]
+                      [--all_lr ALL_LR] [--num_classes NUM_CLASSES] [--output_folder OUTPUT_FOLDER] [--top_num TOP_NUM]
+
  ```
 #### Model Evaluation Metrics
 During model training, test set metrics are printed at each epoch, including F1 score, Accuracy (ACC), AUC and Concordance Index (C-index) for survival prediction.
