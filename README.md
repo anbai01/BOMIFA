@@ -315,7 +315,7 @@ python processing.py \
   --data_folder ./data/MY_DATASET \
   --output_folder ./preprocessed/MY_DATASET \
   --train_labels my_train.csv \
-  --test_labels my_test.csv" \
+  --test_labels my_test.csv \
 --top_k 100
 
 ```
