@@ -153,7 +153,9 @@ python processing.py \
 python main_bomifa.py \
   --data_folder ./test_data \
   --output_folder ./preprocessed_test \
-  --top_num 100 
+  --top_num 100 \
+  --d_model 2 \
+  --n_head 2
 
 ```
 ### main_bomifa.py accepts the following command‑line arguments. To see the full help, run:
