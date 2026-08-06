@@ -1,4 +1,4 @@
-<img width="417" height="253" alt="image" src="https://github.com/user-attachments/assets/64bf3acd-119e-4f00-bbaa-6e27eac4abe5" /># BOMIFA
+# BOMIFA
 Biologically Informed Multi-Omics Integration with Graph Contrastive Learning for Women's Cancer Prognosis
 ![4e14c86ec332cde9fb7b1b8e1e91688.png](4e14c86ec332cde9fb7b1b8e1e91688.png)
 
