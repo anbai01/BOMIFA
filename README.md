@@ -251,33 +251,6 @@ hsa-mir-1181	0.8715525
 ## Usage
 
 
-### Data Preprocessing
-
-Run the preprocessing script to generate the `preprocessed/` folder:
-
-python processing.py
-
-### processing.py  
-The multi-omics data preprocessing pipeline consists of five key steps to ensure robust and biologically meaningful feature representation:
-
-1. **Data Loading & Sample Alignment**  
-   Raw mRNA, DNA methylation, and miRNA expression data are loaded and aligned with the corresponding training and test sample labels from the UCEC dataset.
-
-2. **Variance Filtering**  
-   Low-variance features are removed to reduce noise. Separate thresholds are applied for mRNA, methylation, and miRNA data. For miRNA, only the top 1000 features with the highest variance are retained.
-
-3. **FDR + PCA Feature Selection**  
-   Statistical feature selection is performed using ANOVA F-test followed by FDR correction. PCA is then applied to ensure the first principal component explains less than 50% variance, avoiding over-dominant features. Up to 1000 significant features are retained for mRNA and methylation.
-
-4. **Min-Max Normalization**  
-   All features are normalized to the range [0, 1] using statistics computed solely from the training set to prevent data leakage.
-
-5. **Output Saving**  
-   Preprocessed training and test sets for all three modalities are saved into the `preprocessed/` directory for model training.
-
-   
-python main_bomifa.py
-
 ### Parameters(main_bomifa.py)
 | Parameter                | Description                                                                 |
 |--------------------------|-----------------------------------------------------------------------------|
