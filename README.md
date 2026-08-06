@@ -119,7 +119,7 @@ hsa-let-7a-2	12.62163327	12.33025323	13.82986345	12.34579788
 hsa-let-7a-3	12.62603131	12.33025323	13.86777909	12.37162985
 
 ```
-Recommended survial data format **Example**：
+Recommended survial data format **Example(surv_time.csv)**：
 
  ```bash
 demographic.vital_status	cases.submitter_id	follow_ups.days_to_follow_up
