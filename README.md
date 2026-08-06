@@ -1,4 +1,4 @@
-# BOMIFA
+<img width="417" height="253" alt="image" src="https://github.com/user-attachments/assets/64bf3acd-119e-4f00-bbaa-6e27eac4abe5" /># BOMIFA
 Biologically Informed Multi-Omics Integration with Graph Contrastive Learning for Women's Cancer Prognosis
 ![4e14c86ec332cde9fb7b1b8e1e91688.png](4e14c86ec332cde9fb7b1b8e1e91688.png)
 
@@ -130,15 +130,15 @@ hsa-let-7a-3	12.62603131	12.33025323	13.86777909	12.37162985
 Recommended survial data format **Example(surv_time.csv)**：
 
  ```bash
-demographic.vital_status	cases.submitter_id	follow_ups.days_to_follow_up
-1	TCGA-DF-A2KS	3318
-0	TCGA-AX-A2H2	145
-1	TCGA-EY-A547	545
-0	TCGA-D1-A16V	43
-0	TCGA-FI-A3PV	1249
-1	TCGA-BG-A0VV	811
-1	TCGA-B5-A11U	509
-1	TCGA-BG-A0VW	497
+cases.submitter_id	demographic.vital_status	follow_ups.days_to_follow_up
+TCGA-DF-A2KS	1	3318
+TCGA-AX-A2H2	0	145
+TCGA-EY-A547	1	545
+TCGA-D1-A16V	0	43
+TCGA-FI-A3PV	0	1249
+TCGA-BG-A0VV	1	811
+TCGA-B5-A11U	1	509
+TCGA-BG-A0VW	1	497
 
 
 
