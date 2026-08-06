@@ -26,7 +26,7 @@ def model_prepare(
         'BRCA': {'adj_parameter': 2, 'dim_he_list': [400, 400, 300]},
         'LUAD': {'adj_parameter': 2, 'dim_he_list': [300, 300, 200]}
     }
-    default_config = {'adj_parameter': 2, 'dim_he_list': [400, 400, 300]}
+    default_config = {'adj_parameter': 2, 'dim_he_list': [20, 20, 10]}
 
     config = dataset_config.get(data_folder, default_config)
     if data_folder not in dataset_config:
