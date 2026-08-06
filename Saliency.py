@@ -31,7 +31,7 @@ class TrainedModelSaliencyAnalyzer:
         elif aggregation == 'max':
             feature_importance = stacked_saliency.max(dim=0)[0].max(dim=0)[0]
         else:
-            raise ValueError("不支持的聚合方法")
+            raise ValueError("error")
 
         return feature_importance.cpu().numpy()
 
