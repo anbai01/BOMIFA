@@ -18,12 +18,10 @@ BOMIFA takes mRNA expression, miRNA expression, and DNA methylation data as inpu
 ```plaintext
 BOMIFA/
 ├── README.md                         # Project documentation
+├── environment.yml                   # Conda environment configuration
 ├── requirements.txt                  # List of dependencies
 │
 ├── UCEC/                             # Example dataset (Uterine Corpus Endometrial Carcinoma)
-│   ├── mrna.csv                 # mRNA expression matrix (genes × samples)
-│   ├── methylation.csv          # DNA methylation matrix (probes × samples)
-│   ├── micrna.csv               # miRNA expression matrix (miRNAs × samples)
 │   ├── fold1_test_labels.csv         # Test set labels for fold 1
 │   ├── fold1_train_labels.csv        # Training set labels for fold 1
 │   └── surv_time.csv                 # Survival time and event information
@@ -38,6 +36,16 @@ BOMIFA/
 │   ├── X_train_methyl.csv            # Training set: DNA methylation
 │   ├── X_train_mirna.csv             # Training set: miRNA expression
 │   └── X_train_mrna.csv              # Training set: mRNA expression
+│
+├── test_data/                        # Small-scale test dataset
+│   ├── mrna.csv                      # mRNA expression matrix (genes × samples)
+│   ├── methylation.csv               # DNA methylation matrix (probes × samples)
+│   ├── micrna.csv                    # miRNA expression matrix (miRNAs × samples)
+│   ├── surv_time.csv                 # Survival time and event information
+│   ├── fold1_train_labels.csv        # Training set labels for fold 1
+│   └── fold1_test_labels.csv         # Test set labels for fold 1
+├── preprocessed_test/
+│   └──file
 │
 ├── main_bomifa.py                    # Main entry script (set hyperparameters and launch training)
 ├── main_fine_marker.py               # Biomarker extraction and saliency analysis script
@@ -286,9 +294,7 @@ data/MY_DATASET/
 ├── train_labels.csv
 ├── test_labels.csv
 ├── surv_time.csv
-├── 0_featname.csv
-├── 1_featname.csv
-└── 2_featname.csv
+
 ```
 ### Step 2. Run preprocessing
 ```bash
