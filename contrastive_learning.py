@@ -58,7 +58,7 @@ def contrastive_loss_wo_cross_network(h1, h2, ho):
 
 
 
-def random_feature_mask(input_feature, drop_percent, device=torch.device('cuda')):
+def random_feature_mask(input_feature, drop_percent, device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')):
     p = torch.ones(input_feature.shape, dtype=torch.float).bernoulli_(1 - drop_percent).to(device)
     aug_feature = input_feature * p
     return aug_feature
