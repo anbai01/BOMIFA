@@ -183,6 +183,8 @@ Test C-INDEX:0.61
 
 
 ### Output
+```bash
+
 Final filtered marker gene lists are saved under the directory:
 `./UCEC`
 0_features.csv                   # important markers identified from mRNA expression data
@@ -194,6 +196,7 @@ loss_cross_attention.png         # Loss curve for cross-attention fusion stage
 loss_final_training.png          # Loss curve for end-to-end joint fine-tuning stage
 models                           # Saved best model weights (organized by fold)
 best_results.csv                 # Best validation metrics from training (accuracy, f1, auc, c-index)
+```
 ### Example content of 0_features.csv (mRNA, top 10 features shown, ranked by importance)
 ```bash
 feature_name	importance
@@ -331,9 +334,11 @@ python main_bomifa.py \
 
 
 ## GPU/CPU Support
+```bash
 The code automatically detects GPU availability:
 GPU available: Uses CUDA for training (recommended)
 CPU only: Falls back to CPU (slower but functional)
+```
 
 
 
