@@ -19,7 +19,7 @@ def model_prepare(
     dataset_config = {
         'OV': {'adj_parameter': 2, 'dim_he_list': [300, 300, 200]},
         'CESC': {'adj_parameter': 2, 'dim_he_list': [400, 400, 300]},
-        'UCEC1': {'adj_parameter': 2, 'dim_he_list': [400, 400, 300]},
+        'UCEC': {'adj_parameter': 2, 'dim_he_list': [400, 400, 300]},
         'LGG': {'adj_parameter': 2, 'dim_he_list': [400, 400, 200]},
         'STAD': {'adj_parameter': 2, 'dim_he_list': [400, 400, 300]},
         'HNSC': {'adj_parameter': 2, 'dim_he_list': [400, 400, 200]},
