@@ -231,7 +231,7 @@ def train_test(view_list, num_class, dim_he_list,
     df_path = os.path.join(data_folder, "surv_time.csv")   # Construct path from data_folder
     df_surv = pd.read_csv(df_path)
 
-    df_surv.columns = ['PatientID', 'Survival']  # Rename by column order
+    df_surv.columns = ['PatientID', 'Event','Survival']  # Rename by column order
     # Prepare sample ID lists (common_train, common_test)
     # Merge survival information directly
     train_surv = pd.DataFrame({'PatientID': common_train}).merge(df_surv, on='PatientID', how='left')
