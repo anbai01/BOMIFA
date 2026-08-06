@@ -119,16 +119,19 @@ hsa-let-7a-2	12.62163327	12.33025323	13.82986345	12.34579788
 hsa-let-7a-3	12.62603131	12.33025323	13.86777909	12.37162985
 
 ```
-Recommended survial data format**Example (surv_time.csv)**：
+Recommended survial data format**Example**：
 
  ```bash
-cases.submitter_id	follow_ups.days_to_follow_up
-TCGA-AJ-A3NH	1
-TCGA-SL-A6J9	2
-TCGA-AJ-A8CW	4
-TCGA-AX-A3GI	4
-TCGA-BG-A3EW	5
-TCGA-AX-A3FZ	6
+demographic.vital_status	cases.submitter_id	follow_ups.days_to_follow_up
+1	TCGA-DF-A2KS	3318
+0	TCGA-AX-A2H2	145
+1	TCGA-EY-A547	545
+0	TCGA-D1-A16V	43
+0	TCGA-FI-A3PV	1249
+1	TCGA-BG-A0VV	811
+1	TCGA-B5-A11U	509
+1	TCGA-BG-A0VW	497
+
 
 
 ```
