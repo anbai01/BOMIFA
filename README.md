@@ -177,7 +177,6 @@ usage: main_bomifa.py [-h] [--data_folder DATA_FOLDER] [--view_list VIEW_LIST [V
 
  ```
 
-#### After training, the script automatically invokes Saliency.py to perform saliency analysis and extract top‑ranked biomarkers. The results (feature names and importance scores) are saved in the test_data/marker/.
 
 
 
@@ -194,16 +193,22 @@ Test C-INDEX:0.61
  ```
 ```bash
 Final filtered marker gene lists are saved under the directory:
-`./UCEC`
-0_features.csv                   # important markers identified from mRNA expression data
-1_features.csv                   # important markers identified from DNA methylation data
-2_features.csv                   # important markers identified from miRNA expression data
+`./test_data`
 loss_gnn_pretraining.png         # Loss curve for GNN pretraining stage
 loss_transformer_training.png    # Loss curve for Transformer contrastive learning stage
 loss_cross_attention.png         # Loss curve for cross-attention fusion stage
 loss_final_training.png          # Loss curve for end-to-end joint fine-tuning stage
 models                           # Saved best model weights (organized by fold)
 best_results.csv                 # Best validation metrics from training (accuracy, f1, auc, c-index)
+marker                           #Saved the important markers 
+```
+
+#### After training, the script automatically invokes Saliency.py to perform saliency analysis and extract top‑ranked biomarkers. The results (feature names and importance scores) are saved in the test_data/marker/.
+```bash
+./test_data/marker`
+0_features.csv                   # important markers identified from mRNA expression data
+1_features.csv                   # important markers identified from DNA methylation data
+2_features.csv                   # important markers identified from miRNA expression data
 ```
 
 ### Example content of 0_features.csv (mRNA, top 10 features shown, ranked by importance)
