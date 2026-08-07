@@ -38,10 +38,10 @@ BOMIFA/
 │   └── X_train_mrna.csv              # Training set: mRNA expression
 │
 ├── test_data/                        # Small-scale test dataset
-│   ├── mrna.csv                      # mRNA expression matrix (genes × samples)
-│   ├── methylation.csv               # DNA methylation matrix (probes × samples)
-│   ├── micrna.csv                    # miRNA expression matrix (miRNAs × samples)
-│   ├── surv_time.csv                 # Survival time and event information
+│   ├── mrna.csv                      # Minimal mRNA expression matrix (genes × samples)
+│   ├── methylation.csv               # Minimal DNA methylation matrix (probes × samples)
+│   ├── micrna.csv                    # Minimal miRNA expression matrix (miRNAs × samples)
+│   ├── surv_time.csv                 # Minimal Survival time and event information
 │   ├── fold1_train_labels.csv        # Training set labels for fold 1
 │   └── fold1_test_labels.csv         # Test set labels for fold 1
 ├── preprocessed_test/
@@ -176,7 +176,7 @@ usage: main_bomifa.py [-h] [--data_folder DATA_FOLDER] [--view_list VIEW_LIST [V
 
  ```
 
-#### After training, the script automatically invokes Saliency.py to perform saliency analysis and extract top‑ranked biomarkers. The results (feature names and importance scores) are saved in the UCEC/marker/.
+#### After training, the script automatically invokes Saliency.py to perform saliency analysis and extract top‑ranked biomarkers. The results (feature names and importance scores) are saved in the test_data/marker/.
 
 
 
@@ -185,7 +185,7 @@ usage: main_bomifa.py [-h] [--data_folder DATA_FOLDER] [--view_list VIEW_LIST [V
 ```bash
 During model training, test set metrics are printed at each epoch, including F1 score, Accuracy (ACC), AUC and Concordance Index (C-index) for survival prediction.
 Example console output:
-Test: Epoch 
+Test: Epoch 10
 Test F1: 0.904
 Test ACC1: 0.826
 Test AUC: 0.688
