@@ -118,7 +118,7 @@ UCEC/
 ├── micrna.csv               # miRNA expression matrix (miRNAs × samples)
 ├── fold1_train_labels.csv   # Training set labels for fold 1
 ├── fold1_test_labels.csv    # Test set labels for fold 1
-└──surv_time.csv  
+└──surv_time.csv             # Survival time and event information
 ```
 Recommended omic-data format**Example (miRNA expression matrix)**：
  ```bash
@@ -157,6 +157,7 @@ python processing.py \
   --top_k 100
 ```
 ### Run the model：
+Load pre‑processed multi‑omics train/test datasets from ./preprocessed_test.
 ```bash
 python main_bomifa.py \
   --data_folder ./test_data \
@@ -269,6 +270,7 @@ hsa-mir-1181	0.8715525
 | top_k         | Maximum number of retained top features for each omics modality           |
 
 #### main_bomifa.py
+
 | Parameter                | Description                                                                 |
 |--------------------------|-----------------------------------------------------------------------------|
 | data_folder              | Path to the dataset directory                                               |
