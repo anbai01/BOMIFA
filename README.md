@@ -84,6 +84,7 @@ conda activate bomifa
 pip install -r requirements.txt
 ```
 #### 4. Run the example
+
 ```bash
 python main_bomifa.py \
   --data_folder ./UCEC 
@@ -145,12 +146,8 @@ TCGA-BG-A0VW	1	497
 ```
 ## Minimal Runnable Example
 This minimal example allows users to verify the installation and complete the full workflow without downloading the complete UCEC dataset.
-
-
-### Use preprocessed data (recommended)
-#### Due to the large size of the raw data, we provide ready‑to‑use preprocessed multi‑omics files in the PREPROCESSED/ directory (you can place this folder in the project root). The files are:
- 
-### Run the model：
+### Run the preprocessing：
+The processing.py script performs the initial data preparation for the BOMIFA framework.
 ```bash
 python processing.py \
   --data_folder ./test_data \
@@ -158,9 +155,9 @@ python processing.py \
   --test_labels fold1_test_labels.csv \
   --output_folder ./preprocessed_test \
   --top_k 100
-
-
-
+```
+### Run the model：
+```bash
 python main_bomifa.py \
   --data_folder ./test_data \
   --output_folder ./preprocessed_test \
@@ -178,16 +175,7 @@ usage: main_bomifa.py [-h] [--data_folder DATA_FOLDER] [--view_list VIEW_LIST [V
                       [--all_lr ALL_LR] [--num_classes NUM_CLASSES] [--output_folder OUTPUT_FOLDER] [--top_num TOP_NUM]
 
  ```
-#### Model Evaluation Metrics
-During model training, test set metrics are printed at each epoch, including F1 score, Accuracy (ACC), AUC and Concordance Index (C-index) for survival prediction.
-Example console output:
- ```bash
-Test: Epoch 
-Test F1: 0.904
-Test ACC1: 0.826
-Test AUC: 0.688
-Test C-INDEX:0.61
- ```
+
 #### After training, the script automatically invokes Saliency.py to perform saliency analysis and extract top‑ranked biomarkers. The results (feature names and importance scores) are saved in the UCEC/marker/.
 
 
@@ -195,7 +183,15 @@ Test C-INDEX:0.61
 
 ### Output
 ```bash
-
+During model training, test set metrics are printed at each epoch, including F1 score, Accuracy (ACC), AUC and Concordance Index (C-index) for survival prediction.
+Example console output:
+Test: Epoch 
+Test F1: 0.904
+Test ACC1: 0.826
+Test AUC: 0.688
+Test C-INDEX:0.61
+ ```
+```bash
 Final filtered marker gene lists are saved under the directory:
 `./UCEC`
 0_features.csv                   # important markers identified from mRNA expression data
@@ -208,6 +204,7 @@ loss_final_training.png          # Loss curve for end-to-end joint fine-tuning s
 models                           # Saved best model weights (organized by fold)
 best_results.csv                 # Best validation metrics from training (accuracy, f1, auc, c-index)
 ```
+
 ### Example content of 0_features.csv (mRNA, top 10 features shown, ranked by importance)
 ```bash
 feature_name	importance
@@ -260,9 +257,18 @@ hsa-mir-1181	0.8715525
 
 
 ## Usage
+### Parameters
 
+#### processing.py
+| Parameter     | Description                                                               |
+|---------------|---------------------------------------------------------------------------|
+| data_folder   | Path to the dataset directory containing raw multi‑omics and label files    |
+| train_labels  | Filename of training label file under data_folder                        |
+| test_labels   | Filename of test label file under data_folder                             |
+| output_folder | Output directory to store preprocessed multi‑omics matrices and feature names |
+| top_k         | Maximum number of retained top features for each omics modality           |
 
-### Parameters(main_bomifa.py)
+#### main_bomifa.py
 | Parameter                | Description                                                                 |
 |--------------------------|-----------------------------------------------------------------------------|
 | data_folder              | Path to the dataset directory                                               |
@@ -280,8 +286,8 @@ hsa-mir-1181	0.8715525
 | lr_cross_attention       | Learning rate for the cross-attention module                                |
 | lr_c                     | Learning rate for the classifier layer                                      |
 | all_lr                   | Learning rate for the joint training of the entire model                    |
-| num_classes              | Number of classes for the classification task (binary classification)       |
-
+| output_folder              |Preprocessed data folder storing train‑test sets for each omics            |
+| top_num                  | Number of top‑contribution marker genes per omics                           |
 
 ## Applying BOMIFA to a New Dataset
 ### Step 1. Prepare the input files
@@ -303,7 +309,7 @@ python processing.py \
   --output_folder ./preprocessed/MY_DATASET \
   --train_labels my_train.csv \
   --test_labels my_test.csv \
---top_k 100
+  --top_k 100
 
 ```
 ### Step 3. Train and evaluate the model
