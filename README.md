@@ -120,7 +120,7 @@ UCEC/
 ├── fold1_test_labels.csv    # Test set labels for fold 1
 └──surv_time.csv             # Survival time and event information
 ```
-Recommended omic-data format**Example (miRNA expression matrix)**：
+Recommended omic-data format **Example (miRNA expression matrix)**：
  ```bash
 Ensembl_ID	TCGA-AJ-A3NH	TCGA-SL-A6J9	TCGA-AJ-A8CW	TCGA-AX-A3GI
 hsa-let-7a-1	12.62750927	12.32609183	13.84191944	12.35855423
@@ -128,7 +128,7 @@ hsa-let-7a-2	12.62163327	12.33025323	13.82986345	12.34579788
 hsa-let-7a-3	12.62603131	12.33025323	13.86777909	12.37162985
 
 ```
-Recommended survial data format **Example(surv_time.csv)**：
+Recommended survial data format **Example (surv_time.csv)**：
 
  ```bash
 cases.submitter_id	demographic.vital_status	follow_ups.days_to_follow_up
@@ -317,8 +317,8 @@ python processing.py \
 ### Step 3. Train and evaluate the model
 ```bash
 python main_bomifa.py \
-  --dataset MY_DATASET \
-  --data_folder ./preprocessed/MY_DATASET 
+  --data_folder MY_DATASET \
+  --output_folder ./preprocessed/MY_DATASET 
 
 ```
 
