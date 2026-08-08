@@ -42,8 +42,8 @@ BOMIFA/
 │   ├── methylation.csv               # Minimal DNA methylation matrix (probes × samples)
 │   ├── micrna.csv                    # Minimal miRNA expression matrix (miRNAs × samples)
 │   ├── surv_time.csv                 # Minimal Survival time and event information
-│   ├── fold1_train_labels.csv        # Training set labels for fold 1
-│   └── fold1_test_labels.csv         # Test set labels for fold 1
+│   ├── fold1_train_labels.csv        # Training set labels
+│   └── fold1_test_labels.csv         # Test set labels for
 ├── preprocessed_test/
 │   └──file
 │
