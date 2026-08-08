@@ -92,7 +92,6 @@ python main_bomifa.py \
 ## Requirements
 - Python 3.9+  We do not recommend using Python versions higher than 3.11, as they often lead to dependency conflicts between deep learning frameworks including TensorFlow, PyTorch, and DGL.##
 ## Main dependencies
-TensorFlow ==2.18.0
 PyTorch ==2.2.0
 DGL ==1.1.2
 NumPy ==1.26.4
@@ -186,9 +185,9 @@ usage: main_bomifa.py [-h] [--data_folder DATA_FOLDER] [--view_list VIEW_LIST [V
 During model training, test set metrics are printed at each epoch, including F1 score, Accuracy (ACC), AUC and Concordance Index (C-index) for survival prediction.
 Example console output:
 Test: Epoch 10
-Test F1: 0.904
-Test ACC1: 0.826
-Test AUC: 0.688
+Test F1: 0.804
+Test ACC1: 0.726
+Test AUC: 0.588
 Test C-INDEX:0.61
  ```
 ```bash
