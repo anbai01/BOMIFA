@@ -25,27 +25,7 @@ BOMIFA/
 │   ├── fold1_test_labels.csv         # Test set labels for fold 1
 │   ├── fold1_train_labels.csv        # Training set labels for fold 1
 │   ├── surv_time.csv                 # Survival time and event information
-│   ├── marker/                       # Marker feature output directory
-│   │   ├── 0_features.csv            # Selected features for fold 0
-│   │   ├── 1_features.csv            # Selected features for fold 1
-│   │   └── 2_features.csv            # Selected features for fold 2
-│   └── models/                       # Saved model weights directory
-│       └── 0/                        # Model weights for fold 0
-│          ├── C.pth
-│          ├── C1.pth
-│          ├── C2.pth
-│          ├── C3.pth
-│          ├── D.pth
-│          ├── E1.pth
-│          ├── E2.pth
-│          ├── E3.pth
-│          ├── H1.pth
-│          ├── H2.pth
-│          ├── H3.pth
-│          ├── P1.pth
-│          ├── P2.pth
-│          └── P3.pth
-│   
+
 │
 ├── preprocessed/                     # Preprocessed multi-omics feature data
 │   ├── 0_featname.csv           # Full feature names for mRNA (used for saliency mapping)
@@ -57,7 +37,15 @@ BOMIFA/
 │   ├── X_train_methyl.csv            # Training set: DNA methylation
 │   ├── X_train_mirna.csv             # Training set: miRNA expression
 │   └── X_train_mrna.csv              # Training set: mRNA expression
-│
+│   ├── marker/                       # Marker feature output directory
+│   │   ├── 0_features.csv            # Selected features for fold 0
+│   │   ├── 1_features.csv            # Selected features for fold 1
+│   │   └── 2_features.csv            # Selected features for fold 2
+│   └── models/                       # Saved model weights directory
+│       ├── Fusion_combined.pth   # Fusion module combined weights
+│       ├── View1_combined.pth    # Omics view 1 (mRNA) pre‑trained weights
+│       ├── View2_combined.pth    # Omics view 2 (methylation) pre‑trained weights
+│       └── View3_combined.pth    # Omics view 3 (miRNA) pre‑trained weights
 ├── test_data/                        # Small-scale test dataset
 │   ├── mrna.csv                      # Minimal mRNA expression matrix (genes × samples)
 │   ├── methylation.csv               # Minimal DNA methylation matrix (probes × samples)
@@ -213,7 +201,7 @@ Test C-INDEX:0.61
  ```
 ```bash
 Final filtered marker gene lists are saved under the directory:
-`./test_data`
+`./preprocessed_test`
 loss_gnn_pretraining.png         # Loss curve for GNN pretraining stage
 loss_transformer_training.png    # Loss curve for Transformer contrastive learning stage
 loss_cross_attention.png         # Loss curve for cross-attention fusion stage
@@ -225,13 +213,13 @@ marker                           #Saved the important markers
 
 #### After training completes, the framework automatically creates two output subdirectories inside the dataset folder: models/ (saved model weights for each module) and marker/ (top‑ranked biomarker lists from saliency analysis).
 ```bash
-./test_data/marker`
+./preprocessed_test/marker`
 0_features.csv                   # important markers identified from mRNA expression data
 1_features.csv                   # important markers identified from DNA methylation data
 2_features.csv                   # important markers identified from miRNA expression data
 
 
-./test_data/models/0`
+./preprocessed_test/models/0`
 C.pth
 C1.pth
 C2.pth
