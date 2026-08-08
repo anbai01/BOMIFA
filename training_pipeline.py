@@ -134,7 +134,9 @@ def model_prepare(
         iteration_folder=iteration_folder,
         common_train=common_train,
         common_test=common_test,
-        data_folder=data_folder
+        data_folder=data_folder,
+        output_folder=output_folder
+
     )
 
     num = 0

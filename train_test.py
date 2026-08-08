@@ -177,7 +177,7 @@ def train_test(view_list, num_class, dim_he_list,
                dim_list, onehot_labels_tr_tensor, labels_tr_tensor,
                sample_weight_tr, fold_data_train, fold_data_trte, labels_trte,
                trte_idx, iteration_folder,common_train,common_test,
-               data_folder):
+               data_folder,output_folder):
     """Main train test function"""
 
     num_view = len(view_list)
@@ -223,7 +223,7 @@ def train_test(view_list, num_class, dim_he_list,
     for i in range(num_view):
         plt.plot(range(num_epoch_pretrain), gnn_loss_history[i], marker='o', label=f'View {i + 1}')
     plt.legend()
-    plt.savefig(os.path.join(data_folder, 'loss_gnn_pretraining.png'))
+    plt.savefig(os.path.join(output_folder, 'loss_gnn_pretraining.png'))
     plt.close()
 
     print("\nTraining Transformers...")
@@ -266,7 +266,7 @@ def train_test(view_list, num_class, dim_he_list,
     for i in range(num_view):
         plt.plot(range(transformer_epochs + 1), transformer_loss_history[i], marker='o', label=f'View {i + 1}')
     plt.legend()
-    plt.savefig(os.path.join(data_folder, 'loss_transformer_training.png'))
+    plt.savefig(os.path.join(output_folder, 'loss_transformer_training.png'))
     plt.close()
 
     print("\nTraining Cross Attention...")
@@ -286,7 +286,7 @@ def train_test(view_list, num_class, dim_he_list,
     plt.xlabel('Epoch')
     plt.ylabel('Loss')
     plt.grid(True)
-    plt.savefig(os.path.join(data_folder, 'loss_cross_attention.png'))
+    plt.savefig(os.path.join(output_folder, 'loss_cross_attention.png'))
     plt.close()
 
     print("\nFinal Training...")
@@ -317,16 +317,23 @@ def train_test(view_list, num_class, dim_he_list,
                         'auc': auc_score,
                         'c_index': c_index
                     }])
-                    df_results.to_csv(os.path.join(data_folder, 'best_results.csv'), index=False)
+                    df_results.to_csv(os.path.join(output_folder, 'best_results.csv'), index=False)
 
-                    # Save models
-                    for model_key, model in model_dict.items():
-                        if CUDA_AVAILABLE:
-                            state_dict = {k: v.cpu() for k, v in model.state_dict().items()}
-                        else:
-                            state_dict = model.state_dict()
-                        torch.save(state_dict, f'{iteration_folder}/{model_key}.pth')
-                        # print(f'Saved {model_key} model parameters')
+                    for i in range(1, num_view + 1):
+                        combined_state = {
+                            'E': model_dict[f"E{i}"].state_dict(),
+                            'H': model_dict[f"H{i}"].state_dict(),
+                            'P': model_dict[f"P{i}"].state_dict(),
+                            'C': model_dict[f"C{i}"].state_dict()
+                        }
+                        torch.save(combined_state, os.path.join(iteration_folder, f"View{i}_combined.pth"))
+                        print(f"Saved View{i}_combined.pth (E,H,P,C)")
+                    fusion_state = {
+                        'D': model_dict["D"].state_dict(),
+                        'C': model_dict["C"].state_dict()
+                    }
+                    torch.save(fusion_state, os.path.join(iteration_folder, "Fusion_combined.pth"))
+                    print(f"Saved Fusion_combined.pth (D,C)")
 
     # Plot final loss
     plt.figure()
@@ -335,7 +342,7 @@ def train_test(view_list, num_class, dim_he_list,
     plt.ylabel('Loss')
     plt.grid(True)
     plt.plot(range(final_epochs + 1), final_loss_history, marker='o')
-    plt.savefig(os.path.join(data_folder, 'loss_final_training.png'))
+    plt.savefig(os.path.join(output_folder, 'loss_final_training.png'))
     plt.close()
 
     return pred_labels
