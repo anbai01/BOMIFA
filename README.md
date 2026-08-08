@@ -24,7 +24,28 @@ BOMIFA/
 ├── UCEC/                             # Example dataset (Uterine Corpus Endometrial Carcinoma)
 │   ├── fold1_test_labels.csv         # Test set labels for fold 1
 │   ├── fold1_train_labels.csv        # Training set labels for fold 1
-│   └── surv_time.csv                 # Survival time and event information
+│   ├── surv_time.csv                 # Survival time and event information
+│   ├── marker/                       # Marker feature output directory
+│   │   ├── 0_features.csv            # Selected features for fold 0
+│   │   ├── 1_features.csv            # Selected features for fold 1
+│   │   └── 2_features.csv            # Selected features for fold 2
+│   └── models/                       # Saved model weights directory
+│       └── 0/                        # Model weights for fold 0
+│          ├── C.pth
+│          ├── C1.pth
+│          ├── C2.pth
+│          ├── C3.pth
+│          ├── D.pth
+│          ├── E1.pth
+│          ├── E2.pth
+│          ├── E3.pth
+│          ├── H1.pth
+│          ├── H2.pth
+│          ├── H3.pth
+│          ├── P1.pth
+│          ├── P2.pth
+│          └── P3.pth
+│   
 │
 ├── preprocessed/                     # Preprocessed multi-omics feature data
 │   ├── 0_featname.csv           # Full feature names for mRNA (used for saliency mapping)
@@ -202,13 +223,32 @@ best_results.csv                 # Best validation metrics from training (accura
 marker                           #Saved the important markers 
 ```
 
-#### After training, the script automatically invokes Saliency.py to perform saliency analysis and extract top‑ranked biomarkers. The results (feature names and importance scores) are saved in the test_data/marker/.
+#### After training completes, the framework automatically creates two output subdirectories inside the dataset folder: models/ (saved model weights for each module) and marker/ (top‑ranked biomarker lists from saliency analysis).
 ```bash
 ./test_data/marker`
 0_features.csv                   # important markers identified from mRNA expression data
 1_features.csv                   # important markers identified from DNA methylation data
 2_features.csv                   # important markers identified from miRNA expression data
+
+
+./test_data/models/0/
+C.pth
+C1.pth
+C2.pth
+C3.pth
+D.pth
+E1.pth
+E2.pth
+E3.pth
+H1.pth
+H2.pth
+H3.pth
+P1.pth
+P2.pth
+P3.pth
 ```
+
+
 
 ### Example content of 0_features.csv (mRNA, top 10 features shown, ranked by importance)
 ```bash
