@@ -46,6 +46,7 @@ BOMIFA/
 │       ├── View1_combined.pth    # Omics view 1 (mRNA) pre‑trained weights
 │       ├── View2_combined.pth    # Omics view 2 (methylation) pre‑trained weights
 │       └── View3_combined.pth    # Omics view 3 (miRNA) pre‑trained weights
+│   
 ├── test_data/                        # Small-scale test dataset
 │   ├── mrna.csv                      # Minimal mRNA expression matrix (genes × samples)
 │   ├── methylation.csv               # Minimal DNA methylation matrix (probes × samples)
@@ -220,20 +221,11 @@ marker                           #Saved the important markers
 
 
 ./preprocessed_test/models/0`
-C.pth
-C1.pth
-C2.pth
-C3.pth
-D.pth
-E1.pth
-E2.pth
-E3.pth
-H1.pth
-H2.pth
-H3.pth
-P1.pth
-P2.pth
-P3.pth
+Fusion_combined.pth   # Fusion module combined weights
+View1_combined.pth    # Omics view 1 (mRNA) pre‑trained weights
+View2_combined.pth    # Omics view 2 (methylation) pre‑trained weights
+View3_combined.pth    # Omics view 3 (miRNA) pre‑trained weights
+│   
 ```
 
 
