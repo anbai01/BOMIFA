@@ -117,8 +117,7 @@ conda env create -f environment.yml
 conda activate bomifa
  ```
 
-## Repository Structure
-### Input Data Specifications
+## Input Data Specifications
 BOMIFA uses three omics matrices and corresponding outcome labels.
  ```bash
 UCEC/
@@ -201,16 +200,13 @@ Test AUC: 0.588
 Test C-INDEX:0.61
  ```
 ```bash
-Final filtered marker gene lists are saved under the directory:
-
+The loss curves and best validation metrics are saved under the directory:
 `./preprocessed_test`
 loss_gnn_pretraining.png         # Loss curve for GNN training stage
 loss_transformer_training.png    # Loss curve for Transformer contrastive learning stage
 loss_cross_attention.png         # Loss curve for cross-attention fusion stage
 loss_final_training.png          # Loss curve for end-to-end joint fine-tuning stage
-models                           # Saved best model weights (organized by fold)
-best_results.csv                 # Best validation metrics from training (accuracy, f1, auc, c-index)
-marker                           #Saved the important markers 
+best_results.csv                 # Best validation metrics (accuracy, f1, auc, c-index)
 ```
 
 ```bash
