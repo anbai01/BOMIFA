@@ -142,7 +142,6 @@ def train_epoch_all(data_list, adj_list, label, one_hot_label, sample_weight, mo
     return loss
 
 def test_epoch(test_label, data_list, adj_list, test_indices, model_dict, threshold=None):
-    """Test epoch"""
     for model in model_dict.values():
         model.eval()
 
@@ -178,7 +177,6 @@ def train_test(view_list, num_class, dim_he_list,
                sample_weight_tr, fold_data_train, fold_data_trte, labels_trte,
                trte_idx, iteration_folder,common_train,common_test,
                data_folder,output_folder):
-    """Main train test function"""
 
     num_view = len(view_list)
     model_dict = init_model_dict(
