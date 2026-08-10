@@ -42,11 +42,11 @@ BOMIFA/
 │   │   ├── 1_features.csv            # Selected features for fold 1
 │   │   └── 2_features.csv            # Selected features for fold 2
 │   └── models/                       # Saved model weights directory
-│       ├── Fusion_combined.pth   # Fusion module combined weights
-│       ├── View1_combined.pth    # Omics view 1 (mRNA) pre‑trained weights
-│       ├── View2_combined.pth    # Omics view 2 (methylation) pre‑trained weights
-│       └── View3_combined.pth    # Omics view 3 (miRNA) pre‑trained weights
-│   
+│       ├── Fusion_combined.pth   # Cross-omics Fusion module weights
+│       ├── View1_combined.pth    # Omics-Enhancement Encoder (mRNA) weights
+│       ├── View2_combined.pth    # Omics-Enhancement Encoder (methylation) weights
+│       └── View3_combined.pth     # Omics-Enhancement Encoder (miRNA) weights
+│  
 ├── test_data/                        # Small-scale test dataset
 │   ├── mrna.csv                      # Minimal mRNA expression matrix (genes × samples)
 │   ├── methylation.csv               # Minimal DNA methylation matrix (probes × samples)
@@ -212,20 +212,18 @@ best_results.csv                 # Best validation metrics from training (accura
 marker                           #Saved the important markers 
 ```
 
-#### After training completes, the framework automatically creates two output subdirectories inside the dataset folder: models/ (saved model weights for each module) and marker/ (top‑ranked biomarker lists from saliency analysis).
 ```bash
+After training completes, two output subdirectories are automatically created to save model weights and top ranked biomarkers:
+./preprocessed_test/models/0`
+Fusion_combined.pth   # Cross-omics Fusion module weights
+View1_combined.pth    # Omics-Enhancement Encoder (mRNA) weights
+View2_combined.pth    # Omics-Enhancement Encoder (methylation) weights
+View3_combined.pth    # Omics-Enhancement Encoder (miRNA) weights
+
 ./preprocessed_test/marker`
 0_features.csv                   # important markers identified from mRNA expression data
 1_features.csv                   # important markers identified from DNA methylation data
 2_features.csv                   # important markers identified from miRNA expression data
-
-
-./preprocessed_test/models/0`
-Fusion_combined.pth   # Fusion module combined weights
-View1_combined.pth    # Omics view 1 (mRNA) pre‑trained weights
-View2_combined.pth    # Omics view 2 (methylation) pre‑trained weights
-View3_combined.pth    # Omics view 3 (miRNA) pre‑trained weights
-│   
 ```
 
 
