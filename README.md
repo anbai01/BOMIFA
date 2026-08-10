@@ -214,6 +214,8 @@ marker                           #Saved the important markers
 
 ```bash
 After training completes, two output subdirectories are automatically created to save model weights and top ranked biomarkers:
+
+
 ./preprocessed_test/models/0`
 Fusion_combined.pth   # Cross-omics Fusion module weights
 View1_combined.pth    # Omics-Enhancement Encoder (mRNA) weights
