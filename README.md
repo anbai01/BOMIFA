@@ -194,11 +194,11 @@ usage: main_bomifa.py [-h] [--data_folder DATA_FOLDER] [--view_list VIEW_LIST [V
 ```bash
 During model training, validation set metrics are printed at each epoch, including F1 score, Accuracy (ACC), AUC and Concordance Index (C-index) for survival prediction.
 Example console output:
-Test: Epoch 10
-Test F1: 0.804
-Test ACC1: 0.726
-Test AUC: 0.588
-Test C-INDEX:0.61
+Validation: Epoch 10
+Validation F1: 0.804
+Validation ACC1: 0.726
+Validation AUC: 0.588
+Validation C-INDEX:0.61
  ```
 ```bash
 The loss curves and checkpoint validation metrics are saved under the directory:
