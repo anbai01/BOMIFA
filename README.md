@@ -99,7 +99,8 @@ pip install -r requirements.txt
 python main_bomifa.py \
   --data_folder ./UCEC 
 ```
-## Requirements
+## Installation
+### Requirements
 - Python 3.9+  We do not recommend using Python versions higher than 3.11, as they often lead to dependency conflicts between deep learning frameworks including TensorFlow, PyTorch, and DGL.##
 ## Main dependencies
 PyTorch ==2.2.0
@@ -110,14 +111,14 @@ scikit-learn ==1.5.1
 lifelines ==0.29.0
 - Other dependencies listed in `requirements.txt`
 
-## Recommended reproducible installation
+### Recommended reproducible installation
  ```bash
 
 conda env create -f environment.yml
 conda activate bomifa
  ```
 
-## Input Data Specifications
+### Input Data Specifications
 BOMIFA uses three omics matrices and corresponding outcome labels.
  ```bash
 UCEC/
