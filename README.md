@@ -22,7 +22,7 @@ BOMIFA/
 ├── requirements.txt                  # List of dependencies
 │
 ├── UCEC/                             # Example dataset (Uterine Corpus Endometrial Carcinoma)
-│   ├── fold1_test_labels.csv         # Test set labels for fold 1
+│   ├── fold1_test_labels.csv         # Validation set labels for fold 1
 │   ├── fold1_train_labels.csv        # Training set labels for fold 1
 │   ├── surv_time.csv                 # Survival time and event information
 
@@ -31,9 +31,9 @@ BOMIFA/
 │   ├── 0_featname.csv                # Full feature names for mRNA (used for saliency mapping)
 │   ├── 1_featname.csv                # Full feature names for methylation
 │   ├── 2_featname.csv                # Full feature names for miRNA
-│   ├── X_test_methyl.csv             # Test set: DNA methylation
-│   ├── X_test_mirna.csv              # Test set: miRNA expression
-│   ├── X_test_mrna.csv               # Test set: mRNA expression
+│   ├── X_test_methyl.csv             # Validation set: DNA methylation
+│   ├── X_test_mirna.csv              # Validation set: miRNA expression
+│   ├── X_test_mrna.csv               # Validation set: mRNA expression
 │   ├── X_train_methyl.csv            # Training set: DNA methylation
 │   ├── X_train_mirna.csv             # Training set: miRNA expression
 │   └── X_train_mrna.csv              # Training set: mRNA expression
@@ -47,13 +47,13 @@ BOMIFA/
 │       ├── View2_combined.pth        # Selected checkpoint for the Omics-Enhancement Encoder (methylation)
 │       └── View3_combined.pth        # Selected checkpoint for the Omics-Enhancement Encoder (miRNA)
 │  
-├── test_data/                        # Small-scale test dataset
+├── test_data/                        # Small-scale Validation dataset
 │   ├── mrna.csv                      # Minimal mRNA expression matrix (genes × samples)
 │   ├── methylation.csv               # Minimal DNA methylation matrix (probes × samples)
 │   ├── micrna.csv                    # Minimal miRNA expression matrix (miRNAs × samples)
 │   ├── surv_time.csv                 # Minimal Survival time and event information
 │   ├── fold1_train_labels.csv        # Training set labels
-│   └── fold1_test_labels.csv         # Test set labels 
+│   └── fold1_test_labels.csv         # Validation set labels 
 ├── preprocessed_test/
 │   └──file
 │
@@ -68,7 +68,7 @@ BOMIFA/
 ├── transformer_fusion.py             # Single-modal Transformer encoder
 ├── omics_fusion_model.py             # Detailed LMF implementation (fusion model)
 ├── training_pipeline.py              # BOMIFA end-to-end core pipeline
-├── train_test.py                     # Training and testing loop functions
+├── train_test.py                     # Training and Validation loop functions
 ├── models.py                         # Complete BOMIFA model definition
 ├── processing.py                     # Data preprocessing pipeline
 └── utils.py                          # Utility functions (metrics, weights, adjacency matrices, etc.)
