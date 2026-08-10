@@ -126,7 +126,7 @@ UCEC/
 ├── methylation.csv          # DNA methylation matrix (probes × samples)
 ├── micrna.csv               # miRNA expression matrix (miRNAs × samples)
 ├── fold1_train_labels.csv   # Training set labels for fold 1
-├── fold1_test_labels.csv    # Test set labels for fold 1
+├── fold1_test_labels.csv    # Validation set labels for fold 1
 └──surv_time.csv             # Survival time and event information
 ```
 Recommended omic-data format **Example (miRNA expression matrix)**：
@@ -166,7 +166,7 @@ python processing.py \
   --top_k 100
 ```
 ### Run the model：
-Load pre‑processed multi‑omics train/test datasets from ./preprocessed_test.
+Load pre‑processed multi‑omics train/validation datasets from ./preprocessed_test.
 ```bash
 python main_bomifa.py \
   --data_folder ./test_data \
@@ -285,7 +285,7 @@ hsa-mir-1181	0.8715525
 |---------------|---------------------------------------------------------------------------|
 | data_folder   | Path to the dataset directory containing raw multi‑omics and label files    |
 | train_labels  | Filename of training label file under data_folder                        |
-| test_labels   | Filename of test label file under data_folder                             |
+| test_labels   | Filename of validation label file under data_folder                             |
 | output_folder | Output directory to store preprocessed multi‑omics matrices and feature names |
 | top_k         | Maximum number of retained top features for each omics modality           |
 
@@ -308,7 +308,7 @@ hsa-mir-1181	0.8715525
 | lr_cross_attention       | Learning rate for the cross-attention module                                |
 | lr_c                     | Learning rate for the classifier layer                                      |
 | all_lr                   | Learning rate for the joint training of the entire model                    |
-| output_folder              |Preprocessed data folder storing train‑test sets for each omics            |
+| output_folder              |Preprocessed data folder storing train‑validation sets for each omics            |
 | top_num                  | Number of top‑contribution marker genes per omics                           |
 
 ## Applying BOMIFA to a New Dataset
