@@ -236,10 +236,10 @@ def calculate_classification_metrics(y_true, y_probs,test_time):
     auc_score = roc_auc_score(y_true, y_probs)
     C_index = c_index(test_time, y_probs, y_true)
 
-    print("Test F1: {:.3f}".format(f1))
-    print("Test ACC1: {:.3f}".format(accuracy))
-    print("Test AUC: {:.3f}".format(auc_score))
-    print("Test C-INDEX: {:.3f}".format(C_index))
+    print("Validation F1: {:.3f}".format(f1))
+    print("Validation ACC1: {:.3f}".format(accuracy))
+    print("Validation AUC: {:.3f}".format(auc_score))
+    print("Validation C-INDEX: {:.3f}".format(C_index))
 
     return accuracy, f1, auc_score, C_index,pred_labels
 
