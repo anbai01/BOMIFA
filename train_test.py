@@ -305,7 +305,7 @@ def train_test(view_list, num_class, dim_he_list,
             scores = test_epoch(
                 labels_trte[trte_idx["te"]], fold_data_trte, adj_te_list, trte_idx["te"], model_dict, None
             )
-            print(f"\nTest: Epoch {epoch}")
+            print(f"\nValidation: Epoch {epoch}")
             if num_class == 2:
                 accuracy, f1, auc_score, c_index,pred_labels = metrics(labels_trte[trte_idx["te"]], scores, test_times)
 
