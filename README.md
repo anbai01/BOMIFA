@@ -101,7 +101,7 @@ python main_bomifa.py \
 ```
 ## Installation
 ### Requirements
-- Python 3.9+  We do not recommend using Python versions higher than 3.11, as they often lead to dependency conflicts between deep learning frameworks including TensorFlow, PyTorch, and DGL.##
+- Python 3.9+  We do not recommend using Python versions higher than 3.11, as they often lead to dependency conflicts between deep learning frameworks including TensorFlow, PyTorch, and DGL.
 ### Main dependencies
 PyTorch ==2.2.0
 DGL ==1.1.2
