@@ -42,10 +42,10 @@ BOMIFA/
 │   │   ├── 1_features.csv            # important markers identified from DNA methylation data
 │   │   └── 2_features.csv            # important markers identified from miRNA expression data
 │   └── models/                       # Saved model weights directory
-│       ├── Fusion_combined.pth       # Cross-omics Fusion module weights
-│       ├── View1_combined.pth        # Omics-Enhancement Encoder (mRNA) weights
-│       ├── View2_combined.pth        # Omics-Enhancement Encoder (methylation) weights
-│       └── View3_combined.pth        # Omics-Enhancement Encoder (miRNA) weights
+│       ├── Fusion_combined.pth       # Selected checkpoint for the Fusion module
+│       ├── View1_combined.pth        # Selected checkpoint for the Omics-Enhancement Encoder (mRNA)
+│       ├── View2_combined.pth        # Selected checkpoint for the Omics-Enhancement Encoder (methylation)
+│       └── View3_combined.pth        # Selected checkpoint for the Omics-Enhancement Encoder (miRNA)
 │  
 ├── test_data/                        # Small-scale test dataset
 │   ├── mrna.csv                      # Minimal mRNA expression matrix (genes × samples)
@@ -207,17 +207,16 @@ loss_gnn_pretraining.png         # Loss curve for GNN training stage
 loss_transformer_training.png    # Loss curve for Transformer contrastive learning stage
 loss_cross_attention.png         # Loss curve for cross-attention fusion stage
 loss_final_training.png          # Loss curve for end-to-end joint fine-tuning stage
-best_results.csv                 # Best validation metrics (accuracy, f1, auc, c-index)
+best_results.csv                 # Performance of the selected checkpoint on the validation set
 ```
-
 ```bash
-After training completes, two output subdirectories are automatically created to save model weights and top ranked biomarkers:
+After training, two output subdirectories are automatically generated to store the selected checkpoints and the ranked candidate biomarkers:
 
 ./preprocessed_test/models/0`
-Fusion_combined.pth   # Cross-omics Fusion module weights
-View1_combined.pth    # Omics-Enhancement Encoder (mRNA) weights
-View2_combined.pth    # Omics-Enhancement Encoder (methylation) weights
-View3_combined.pth    # Omics-Enhancement Encoder (miRNA) weights
+Fusion_combined.pth   # Selected checkpoint for the Fusion module
+View1_combined.pth    # Selected checkpoint for the Omics-Enhancement Encoder (mRNA)
+View2_combined.pth    # Selected checkpoint for the Omics-Enhancement Encoder (methylation)
+View3_combined.pth    # Selected checkpoint for the Omics-Enhancement Encoder (miRNA)
 
 ./preprocessed_test/marker`
 0_features.csv                   # important markers identified from mRNA expression data
