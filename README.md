@@ -202,6 +202,7 @@ Test C-INDEX:0.61
  ```
 ```bash
 Final filtered marker gene lists are saved under the directory:
+
 `./preprocessed_test`
 loss_gnn_pretraining.png         # Loss curve for GNN training stage
 loss_transformer_training.png    # Loss curve for Transformer contrastive learning stage
@@ -214,7 +215,6 @@ marker                           #Saved the important markers
 
 ```bash
 After training completes, two output subdirectories are automatically created to save model weights and top ranked biomarkers:
-
 
 ./preprocessed_test/models/0`
 Fusion_combined.pth   # Cross-omics Fusion module weights
