@@ -38,9 +38,9 @@ BOMIFA/
 │   ├── X_train_mirna.csv             # Training set: miRNA expression
 │   └── X_train_mrna.csv              # Training set: mRNA expression
 │   ├── marker/                       # Marker feature output directory
-│   │   ├── 0_features.csv            # Selected features for fold 0
-│   │   ├── 1_features.csv            # Selected features for fold 1
-│   │   └── 2_features.csv            # Selected features for fold 2
+│   │   ├── 0_features.csv            # important markers identified from mRNA expression data
+│   │   ├── 1_features.csv            # important markers identified from DNA methylation data
+│   │   └── 2_features.csv            # important markers identified from miRNA expression data
 │   └── models/                       # Saved model weights directory
 │       ├── Fusion_combined.pth   # Cross-omics Fusion module weights
 │       ├── View1_combined.pth    # Omics-Enhancement Encoder (mRNA) weights
