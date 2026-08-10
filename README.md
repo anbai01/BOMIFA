@@ -28,9 +28,9 @@ BOMIFA/
 
 │
 ├── preprocessed/                     # Preprocessed multi-omics feature data
-│   ├── 0_featname.csv           # Full feature names for mRNA (used for saliency mapping)
-│   ├── 1_featname.csv           # Full feature names for methylation
-│   ├── 2_featname.csv           # Full feature names for miRNA
+│   ├── 0_featname.csv                # Full feature names for mRNA (used for saliency mapping)
+│   ├── 1_featname.csv                # Full feature names for methylation
+│   ├── 2_featname.csv                # Full feature names for miRNA
 │   ├── X_test_methyl.csv             # Test set: DNA methylation
 │   ├── X_test_mirna.csv              # Test set: miRNA expression
 │   ├── X_test_mrna.csv               # Test set: mRNA expression
@@ -42,10 +42,10 @@ BOMIFA/
 │   │   ├── 1_features.csv            # important markers identified from DNA methylation data
 │   │   └── 2_features.csv            # important markers identified from miRNA expression data
 │   └── models/                       # Saved model weights directory
-│       ├── Fusion_combined.pth   # Cross-omics Fusion module weights
-│       ├── View1_combined.pth    # Omics-Enhancement Encoder (mRNA) weights
-│       ├── View2_combined.pth    # Omics-Enhancement Encoder (methylation) weights
-│       └── View3_combined.pth     # Omics-Enhancement Encoder (miRNA) weights
+│       ├── Fusion_combined.pth       # Cross-omics Fusion module weights
+│       ├── View1_combined.pth        # Omics-Enhancement Encoder (mRNA) weights
+│       ├── View2_combined.pth        # Omics-Enhancement Encoder (methylation) weights
+│       └── View3_combined.pth        # Omics-Enhancement Encoder (miRNA) weights
 │  
 ├── test_data/                        # Small-scale test dataset
 │   ├── mrna.csv                      # Minimal mRNA expression matrix (genes × samples)
